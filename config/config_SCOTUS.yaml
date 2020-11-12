@@ -1,13 +1,13 @@
-training: !!bool "true"
+training: !!bool "False"
 device: "cuda"
-unprocessed_data: './TIMIT/*/*/*/*.wav' #NEEDS TO CHANGE
+unprocessed_data: 'drive/My Drive/1006: Term Project/SCOTUS/*/*' 
 ---
 data:
-    train_path: './train_tisv'
-    train_path_unprocessed: './TIMIT/TRAIN/*/*/*.wav'
-    test_path: './test_tisv'
-    test_path_unprocessed: './TIMIT/TEST/*/*/*.wav'
+    train_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/train/'
+    test_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/test/'
+    dict_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/'
     data_preprocessed: !!bool "true" 
+    verbose: !!bool "true"
     sr: 16000
     nfft: 512 #For mel spectrogram preprocess
     window: 0.025 #(s)
@@ -31,7 +31,7 @@ train:
     log_file: './speech_id_checkpoint/Stats'
     checkpoint_interval: 120 #Save model after x speaker epochs
     checkpoint_dir: './speech_id_checkpoint'
-    restore: !!bool "false" #Resume training from previous model path
+    restore: !!bool "True" #Resume training from previous model path
 ---
 test:
     N : 4 #Number of speakers in batch
