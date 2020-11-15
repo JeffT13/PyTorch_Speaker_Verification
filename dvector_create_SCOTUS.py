@@ -102,7 +102,7 @@ def Sort_Tuple(tup):
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
 
 total_case_num = len(case_path)
-train_case_num= len(case_path)-2    
+train_case_num= (total_case_num//10)*9 #90% training
 min_va = 2 # minimum voice activity length
 label = 20 # unknown speaker label counter (leave room for 20 judges)
 train_saved = False
@@ -227,11 +227,11 @@ for i, folder in enumerate(case_path):
     tst_pthlst[case]=[item for sublist in case_file_lst for item in sublist]
     train_sequence = np.asarray(case_sequence)
     train_cluster_id = np.asarray(case_cluster_id)
-    train_fold = hp.data.test_path+case+'/'
-    if not os.path.exists(train_fold):
-      os.makedirs(train_fold)
-    np.save(train_fold+case+'_seq',train_sequence)
-    np.save(train_fold+case+'_id',train_cluster_id)
+    test_fold = hp.data.test_path+case+'/'
+    if not os.path.exists(test_fold):
+      os.makedirs(test_fold)
+    np.save(test_fold+case+'_seq',train_sequence)
+    np.save(test_fold+case+'_id',train_cluster_id)
     train_sequence = []
     train_cluster_id = []
 
