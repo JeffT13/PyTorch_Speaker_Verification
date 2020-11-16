@@ -80,23 +80,6 @@ def align_embeddings(embeddings):
         avg_embeddings[i] = np.average(embeddings[partition[0]:partition[1]],axis=0) 
     return avg_embeddings
     
-
-
-# from https://www.geeksforgeeks.org/python-program-to-sort-a-list-of-tuples-by-second-item/
-# changed to sort by first, sort alignmentdict by start time of speech
-def Sort_Tuple(tup):  
-      
-    # getting length of list of tuples 
-    lst = len(tup)  
-    for i in range(0, lst):  
-          
-        for j in range(0, lst-i-1):  
-            if (tup[j][0] > tup[j + 1][0]):  
-                temp = tup[j]  
-                tup[j]= tup[j + 1]  
-                tup[j + 1]= temp  
-    return tup  
-    
     
 #dataset path
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
@@ -163,6 +146,7 @@ for i, folder in enumerate(case_path):
 
     spkr_file_lst = []
     spkr_sequence = []
+    spkr_cluster_lst = []
     spkr_cluster_id = []
 
     for file in os.listdir(folder+'/'+spkr_name):
@@ -186,6 +170,8 @@ for i, folder in enumerate(case_path):
         STFT_frames = torch.tensor(np.transpose(STFT_frames, axes=(2,1,0)))
         embeddings = embedder_net(STFT_frames)
         aligned_embeddings = align_embeddings(embeddings.detach().numpy())
+        
+        
         spkr_sequence.append(aligned_embeddings)
         for embedding in aligned_embeddings:
           spkr_cluster_id.append(str(use_label)) #use_label handling judge id
@@ -193,16 +179,17 @@ for i, folder in enumerate(case_path):
         #Track full names of processed wav files
         pth = file.split(".")[0]+'.txt'
         pth = case+'/'+spkr_name+'/'+pth
-        f = open(dir+pth, 'r')
+        f = open(hp.data.main_path+pth, 'r')
         f = f.read().split(" ")
         spkr_file_lst.append((f[0], f[1], np.shape(aligned_embeddings)[0], count, s))
+        spkr_cluster_lst.append(spkr_cluster_id)
         count = count + 1
 
     if verbose:
       print('Processed', count, 'files for case', case, 'for spkr', spkr_name)
     case_file_lst.append(spkr_file_lst)
     case_sequence.append(spkr_sequence)
-    case_cluster_id.append(spkr_cluster_id)
+    case_cluster_id.append(spkr_cluster_lst)
     s+=1
 
   if verbose:
@@ -276,19 +263,23 @@ for dir in [hp.data.train_path, hp.data.test_path]:
       print("Bad dir")
       raise RuntimeError
 
+    #sorts sequence by times 
     srtlst = sorted(path, key=lambda x: x[0])
+    
     temp_sequence = np.load(dir+case+'/'+case+'_seq.npy',allow_pickle=True)
     temp_cluster_id = np.load(dir+case+'/'+case+'_id.npy', allow_pickle=True)
     temp_lst = []
+    temp_id_lst = []
 
     for t0,t1,s,i,j in srtlst:
       siz+=s
-      temp_lst.append(temp_sequence[j][i])  
+      temp_lst.append(temp_sequence[j][i])
+      temp_id_lst.append(temp_cluster_id[j][i])
 
     case_emb = np.concatenate(temp_lst, axis=0)
     print("Expected Shape:", siz, " X ", 256)
     print(np.shape(case_emb))
-    case_label = np.concatenate(temp_cluster_id, axis=0)
+    case_label = np.concatenate(temp_id_lst, axis=0)
 
     np.save(dir+case+'/'+case[:-7]+'_emb.npy', case_emb)
     np.save(dir+case+'/'+case[:-7]+'_label.npy', case_label)

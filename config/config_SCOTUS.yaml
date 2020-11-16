@@ -3,6 +3,7 @@ device: "cuda"
 unprocessed_data: 'drive/My Drive/1006: Term Project/SCOTUS/*/*' 
 ---
 data:
+    main_path: 'drive/My Drive/1006: Term Project/SCOTUS/'
     train_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/train/'
     test_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/test/'
     dict_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/'
