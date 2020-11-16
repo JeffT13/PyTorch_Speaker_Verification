@@ -80,7 +80,11 @@ def align_embeddings(embeddings):
         avg_embeddings[i] = np.average(embeddings[partition[0]:partition[1]],axis=0) 
     return avg_embeddings
     
-    
+
+#initialize SpeechEmbedder
+embedder_net = SpeechEmbedder()
+embedder_net.load_state_dict(torch.load(hp.model.model_path))
+   
 #dataset path
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
 
