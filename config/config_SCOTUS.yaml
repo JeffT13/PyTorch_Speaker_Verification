@@ -1,12 +1,12 @@
 training: !!bool "False"
 device: "cuda"
-unprocessed_data: 'drive/My Drive/1006: Term Project/SCOTUS/*/*' 
+unprocessed_data: '/scratch/smt570/audio_data/wavs/SCOTUS/*/*' 
 ---
 data:
-    main_path: 'drive/My Drive/1006: Term Project/SCOTUS/'
-    train_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/train/'
-    test_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/test/'
-    dict_path: 'drive/My Drive/1006: Term Project/SCOTUS_Processed/'
+    main_path: '/scratch/smt570/audio_data/wavs/SCOTUS/'
+    train_path: '/scratch/jt2565/SCOTUS_Processed/train/'
+    test_path: '/scratch/jt2565/SCOTUS_Processed/test/'
+    dict_path: '/scratch/jt2565/SCOTUS_Processed/'
     data_preprocessed: !!bool "true" 
     verbose: !!bool "true"
     sr: 16000
