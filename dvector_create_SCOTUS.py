@@ -204,8 +204,8 @@ for i, folder in enumerate(case_path):
   if not train_saved:
     print('saving train case sequence', case)
     trn_pthlst[case]=[item for sublist in case_file_lst for item in sublist]
-    train_sequence = np.asarray(case_sequence)
-    train_cluster_id = np.asarray(case_cluster_id)
+    train_sequence = np.asarray(case_sequence, dtype='object')
+    train_cluster_id = np.asarray(case_cluster_id, dtype='object')
     train_fold = hp.data.train_path+case+'/'
     if not os.path.exists(train_fold):
       os.makedirs(train_fold)
@@ -216,8 +216,8 @@ for i, folder in enumerate(case_path):
   else:
     print('saving test case sequence', case)
     tst_pthlst[case]=[item for sublist in case_file_lst for item in sublist]
-    train_sequence = np.asarray(case_sequence)
-    train_cluster_id = np.asarray(case_cluster_id)
+    train_sequence = np.asarray(case_sequence, dtype='object')
+    train_cluster_id = np.asarray(case_cluster_id, dtype='object')
     test_fold = hp.data.test_path+case+'/'
     if not os.path.exists(test_fold):
       os.makedirs(test_fold)
