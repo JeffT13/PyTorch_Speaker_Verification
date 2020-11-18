@@ -87,7 +87,8 @@ def align_embeddings(embeddings):
 #initialize SpeechEmbedder
 embedder_net = SpeechEmbedder()
 embedder_net.load_state_dict(torch.load(hp.model.model_path))
-   
+embedder_net.to(hp.device)
+
 #dataset path
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
 
@@ -175,9 +176,9 @@ for i, folder in enumerate(case_path):
         STFT_frames = get_STFTs(concat_seg)
         STFT_frames = np.stack(STFT_frames, axis=2)
         STFT_frames = torch.tensor(np.transpose(STFT_frames, axes=(2,1,0)))
+        STFT_frames = STFT_frames.to(hp.device)
         embeddings = embedder_net(STFT_frames)
-        aligned_embeddings = align_embeddings(embeddings.detach().numpy())
-        
+        aligned_embeddings = align_embeddings(embeddings.detach().cpu().numpy())
         
         spkr_sequence.append(aligned_embeddings)
         for embedding in aligned_embeddings:
