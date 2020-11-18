@@ -175,7 +175,7 @@ for i, folder in enumerate(case_path):
         STFT_frames = torch.tensor(np.transpose(STFT_frames, axes=(2,1,0)))
         STFT_frames = STFT_frames.to(hp.device)
         embeddings = embedder_net(STFT_frames)
-        aligned_embeddings = align_embeddings(embeddings.detach().numpy())
+        aligned_embeddings = align_embeddings(embeddings.detach().cpu().numpy())
         
         spkr_sequence.append(aligned_embeddings)
         for embedding in aligned_embeddings:
