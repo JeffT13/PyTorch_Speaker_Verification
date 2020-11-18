@@ -7,4 +7,4 @@
 #SBATCH --job-name=dvec_SCOTUS
 #SBATCH --output=scotusprint.out
 
-python dvector_create_SCOTUS.py
+python dvector_SCOTUS.py
