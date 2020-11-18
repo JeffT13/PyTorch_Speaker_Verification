@@ -3,8 +3,10 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=4:00:00
-#SBATCH --mem=5GB
+#SBATCH --mem=16GB
 #SBATCH --job-name=dvec_SCOTUS
+#SBATCH --output=scotusprint.out
+
 
 ##module purge
 ##module load anaconda3/5.3.1
