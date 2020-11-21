@@ -1,13 +1,9 @@
-training: !!bool "False"
 device: "cuda"
 unprocessed_data: '/scratch/smt570/audio_data/wavs/SCOTUS/*/*' 
 ---
 data:
     main_path: '/scratch/smt570/audio_data/wavs/SCOTUS/'
-    train_path: '/scratch/jt2565/SCOTUS_Processed/train/'
-    test_path: '/scratch/jt2565/SCOTUS_Processed/test/'
-    dict_path: '/scratch/jt2565/SCOTUS_Processed/'
-    data_preprocessed: !!bool "true" 
+    save_path: '/scratch/jt2565/SCOTUS_Processed/'
     verbose: !!bool "true"
     sr: 16000
     nfft: 512 #For mel spectrogram preprocess

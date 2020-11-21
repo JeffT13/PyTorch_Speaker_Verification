@@ -92,26 +92,20 @@ embedder_net.to(hp.device)
 #dataset path
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
 
-total_case_num = len(case_path)
-train_case_num= (total_case_num//10)*9 #90% training
 min_va = 2 # minimum voice activity length
 label = 20 # unknown speaker label counter (leave room for 20 judges)
-train_saved = False
 
 cnt = 0 # counter for judge_dict
 judge_dict = dict()
 
 rm_pthlst = [] #list of wav files too short to process 
-train_sequence = [] # sequence holder
-train_cluster_id = [] # cluster_id holder
+temp_sequence = [] # sequence holder
+temp_cluster_id = [] # cluster_id holder
 
 # File Use Tracking
-trn_pthlst = dict() 
-tst_pthlst = dict() 
 
 verbose = hp.data.verbose
 embedder_net.eval()
-
 
 
 '''
@@ -125,6 +119,7 @@ Saves
     bad wav file list 
         - .csv
 '''
+
 for i, folder in enumerate(case_path):
   case = folder.split('/')[-1]
   if verbose:
@@ -133,10 +128,10 @@ for i, folder in enumerate(case_path):
   case_file_lst = []
   case_sequence = []
   case_cluster_id = []
-  s=0
+  spkrtracker=0
   
   for spkr_name in os.listdir(folder):
-    count = 0
+    casecount = 0
     if verbose:
       print("Processing spkr:", spkr_name)
 
@@ -155,7 +150,6 @@ for i, folder in enumerate(case_path):
     spkr_file_lst = []
     spkr_sequence = []
     spkr_cluster_lst = []
-    spkr_cluster_id = []
 
     for file in os.listdir(folder+'/'+spkr_name):
       if file[-4:] == '.wav':
@@ -181,6 +175,7 @@ for i, folder in enumerate(case_path):
         aligned_embeddings = align_embeddings(embeddings.detach().cpu().numpy())
         
         spkr_sequence.append(aligned_embeddings)
+        spkr_cluster_id = []
         for embedding in aligned_embeddings:
           spkr_cluster_id.append(str(use_label)) #use_label handling judge id
 
@@ -189,60 +184,36 @@ for i, folder in enumerate(case_path):
         pth = case+'/'+spkr_name+'/'+pth
         f = open(hp.data.main_path+pth, 'r')
         f = f.read().split(" ")
-        spkr_file_lst.append((f[0], f[1], np.shape(aligned_embeddings)[0], count, s))
+        spkr_file_lst.append((f[0], f[1], np.shape(aligned_embeddings)[0], casecount, spkrtracker))
         spkr_cluster_lst.append(spkr_cluster_id)
-        count = count + 1
+        casecount = casecount + 1
 
     if verbose:
-      print('Processed', count, 'files for case', case, 'for spkr', spkr_name)
+      print('Processed', casecount, 'files for case', case, 'for spkr', spkr_name)
     case_file_lst.append(spkr_file_lst)
     case_sequence.append(spkr_sequence)
     case_cluster_id.append(spkr_cluster_lst)
-    s+=1
+    spkrtracker+=1
 
   if verbose:
-    print('Handled', s, 'speakers for case', case)
-  if i >= train_case_num:
-    train_saved = True
+    print('Handled', spkrtracker, 'speakers for case', case)
+    print('saving case sequence', case)
 
-  if not train_saved:
-    print('saving train case sequence', case)
-    trn_pthlst[case]=[item for sublist in case_file_lst for item in sublist]
-    train_sequence = np.asarray(case_sequence, dtype='object')
-    train_cluster_id = np.asarray(case_cluster_id, dtype='object')
-    train_fold = hp.data.train_path+case+'/'
-    if not os.path.exists(train_fold):
-      os.makedirs(train_fold)
-    np.save(train_fold+case+'_seq',train_sequence)
-    np.save(train_fold+case+'_id',train_cluster_id)
-    train_sequence = []
-    train_cluster_id = []
-  else:
-    print('saving test case sequence', case)
-    tst_pthlst[case]=[item for sublist in case_file_lst for item in sublist]
-    train_sequence = np.asarray(case_sequence, dtype='object')
-    train_cluster_id = np.asarray(case_cluster_id, dtype='object')
-    test_fold = hp.data.test_path+case+'/'
-    if not os.path.exists(test_fold):
-      os.makedirs(test_fold)
-    np.save(test_fold+case+'_seq',train_sequence)
-    np.save(test_fold+case+'_id',train_cluster_id)
-    train_sequence = []
-    train_cluster_id = []
+  fold = hp.data.save_path+case+'/'
+  if not os.path.exists(fold):
+    os.makedirs(fold)
+  temp_sequence = np.asarray(case_sequence, dtype='object')
+  temp_cluster_id = np.asarray(case_cluster_id, dtype='object')
+  np.save(fold+case+'_embarr',temp_sequence)
+  np.save(fold+case+'_labelarr',temp_cluster_id)
+  temp_sequence = []
+  temp_cluster_id = []
 
+  info_lst=[item for sublist in case_file_lst for item in sublist]
+  with open(fold+case+'_info.csv', 'w+') as file:     
+    write = csv.writer(file) 
+    write.writerows(info_lst)
 
-dictpath = hp.data.dict_path
-
-trainjson = json.dumps(trn_pthlst)
-j = open(hp.data.dict_path+"traininfo_dict.json", "w")
-j.write(trainjson)
-j.close()
-
-testjson = json.dumps(tst_pthlst)
-k = open(hp.data.dict_path+"testinfo_dict.json", "w")
-k.write(testjson)
-k.close()
-
-with open(hp.data.dict_path+'rm_pthlst.csv', 'w') as r:
-  wr = csv.writer(r, delimiter=",")
-  wr.writerow(rm_pthlst)
+  with open(fold+case+'_2remove.csv', 'w') as rm:
+    wr = csv.writer(rm, delimiter=",")
+    wr.writerow(rm_pthlst)
