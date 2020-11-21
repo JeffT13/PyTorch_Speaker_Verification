@@ -6,5 +6,6 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=8GB
 #SBATCH --job-name=dvec_SCOTUS
+#SBATCH --output=dvec.out
 
 python dvector_SCOTUS.py
