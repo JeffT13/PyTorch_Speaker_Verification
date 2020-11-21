@@ -98,9 +98,8 @@ label = 20 # unknown speaker label counter (leave room for 20 judges)
 cnt = 0 # counter for judge_dict
 judge_dict = dict()
 
-rm_pthlst = [] #list of wav files too short to process 
-temp_sequence = [] # sequence holder
-temp_cluster_id = [] # cluster_id holder
+
+
 
 # File Use Tracking
 
@@ -124,12 +123,13 @@ for i, folder in enumerate(case_path):
     case = folder.split('/')[-1]
     if verbose:
         print("Processing case:", case)
-
+        
+    rm_pthlst = []
     case_file_lst = []
     case_sequence = []
     case_cluster_id = []
     spkrtracker=0
-
+     
     for spkr_name in os.listdir(folder):
         casecount = 0
         if verbose:
@@ -206,8 +206,7 @@ for i, folder in enumerate(case_path):
     temp_cluster_id = np.asarray(case_cluster_id, dtype='object')
     np.save(fold+case+'_embarr',temp_sequence)
     np.save(fold+case+'_labelarr',temp_cluster_id)
-    temp_sequence = []
-    temp_cluster_id = []
+
 
     info_lst=[item for sublist in case_file_lst for item in sublist]
     with open(fold+case+'_info.csv', 'w+') as file:     
@@ -216,4 +215,4 @@ for i, folder in enumerate(case_path):
 
     with open(fold+case+'_2remove.csv', 'w') as rm:
     	wr = csv.writer(rm, delimiter=",")
-   	wr.writerow(rm_pthlst)
+        wr.writerow(rm_pthlst)
