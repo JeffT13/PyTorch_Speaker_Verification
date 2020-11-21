@@ -1,13 +1,10 @@
-# PyTorch_Speaker_Verification
+# SCOTUS_Speaker_Verification
 
-PyTorch implementation of speech embedding net and loss described here: https://arxiv.org/pdf/1710.10467.pdf.
 
-Also contains code to create embeddings compatible as input for the speaker diarization model found at https://github.com/google/uis-rnn
+Implementation of speech embedding net and loss (described [here](https://arxiv.org/pdf/1710.10467.pdf)). Original implementation by HarryVolek utilizes the [TIMIT dataset](https://github.com/philipperemy/timit) for training the speech embedder. We add the [ISCU database]() to the speech embedding net training and convert the Supreme Court of the United States (SCOTUS) oral arguments into a d-vectors for the speaker diarization model found at [uisrnn](https://github.com/google/uis-rnn). Dataset parameters are handled in isolated config files.   
 
-![training loss](https://github.com/HarryVolek/PyTorch_Speaker_Verification/blob/master/Results/Loss.png)
+Adapted by Sophia Tsilerides, Jeffrey Tumminia, Amanda Kuznecov, Ilana Weinstein as part of NYU Center for Data Science Capstone Project. Research mentored by Prof. Aaron Kaufman. Computational resources provided by NYU Prince HPC.  
 
-The TIMIT speech corpus was used to train the model, found here: https://catalog.ldc.upenn.edu/LDC93S1,
-or here, https://github.com/philipperemy/timit
 
 # Dependencies
 
@@ -15,50 +12,33 @@ or here, https://github.com/philipperemy/timit
 * python 3.5+
 * numpy 1.15.4
 * librosa 0.6.1
+* webrtcvad 2.0.10 (necc for dvectors)
 
-The python WebRTC VAD found at https://github.com/wiseman/py-webrtcvad is required to create run dvector_create.py, but not to train the neural network.
 
-# Preprocessing
+# `SpeechEmbedder` Training
 
-Change the following config.yaml key to a regex containing all .WAV files in your downloaded TIMIT dataset. The TIMIT .WAV files must be converted to the standard format (RIFF) for the dvector_create.py script, but not for training the neural network.
-```yaml
-unprocessed_data: './TIMIT/*/*/*/*.wav'
-```
-Run the preprocessing script:
-```
-./data_preprocess.py 
-```
-Two folders will be created, train_tisv and test_tisv, containing .npy files containing numpy ndarrays of speaker utterances with a 90%/10% training/testing split.
+We follow the original implementation by HarryVolek to train the speech embedding network on the TIMIT dataset. Instructions for data preprocessing and training can be found in TIMIT README (which is the original repo README).   
 
-# Training
+### ISCU
 
-To train the speaker verification model, run:
-```
-./train_speech_embedder.py 
-```
-with the following config.yaml key set to true:
-```yaml
-training: !!bool "true"
-```
-for testing, set the key value to:
-```yaml
-training: !!bool "false"
-```
-The log file and checkpoint save locations are controlled by the following values:
-```yaml
-log_file: './speech_id_checkpoint/Stats'
-checkpoint_dir: './speech_id_checkpoint'
-```
-Only TI-SV is implemented.
+follows similar implementation to TIMIT. Uses l `config/...`
 
-# Performance
+## Performance 
 
 ```
-EER across 10 epochs: 0.0377
+EER across # epochs:
 ```
 
-# D vector embedding creation
 
-After training and testing the model, run dvector_create.py to create the numpy files train_sequence.npy, train_cluster_ids.npy, test_sequence.npy, and test_cluster_ids.npy. 
+# SCOTUS processing
 
-These files can be loaded and used to train the uis-rnn model found at https://github.com/google/uis-rnn
+
+### data processing
+
+
+### dvector embedding creations
+
+
+
+
+This procedure outputs to a folder called `SCOTUS_Processed` a folder for each case processed, each containing a numpy array of dvector embeddings (`case_sequence.npy`) and a numpy array of labels (`case_cluster_id.npy`) which are both the same length, as well as a csv of a list of files which were not embedded (usually do to being too short). These are formatted for [our fork of the uisrnn](https://github.com/JeffT13/uis-rnn) 
