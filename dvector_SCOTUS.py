@@ -189,19 +189,19 @@ for i, folder in enumerate(case_path):
                 casecount = casecount + 1
 
         if verbose:
-        print('Processed', casecount, 'files for case', case, 'for spkr', spkr_name)
+        	print('Processed', casecount, 'files for case', case, 'for spkr', spkr_name)
         case_file_lst.append(spkr_file_lst)
         case_sequence.append(spkr_sequence)
         case_cluster_id.append(spkr_cluster_lst)
         spkrtracker+=1
 
     if verbose:
-    print('Handled', spkrtracker, 'speakers for case', case)
-    print('saving case sequence', case)
+    	print('Handled', spkrtracker, 'speakers for case', case)
+    	print('saving case sequence', case)
 
     fold = hp.data.save_path+case+'/'
     if not os.path.exists(fold):
-    os.makedirs(fold)
+    	os.makedirs(fold)
     temp_sequence = np.asarray(case_sequence, dtype='object')
     temp_cluster_id = np.asarray(case_cluster_id, dtype='object')
     np.save(fold+case+'_embarr',temp_sequence)
@@ -211,9 +211,9 @@ for i, folder in enumerate(case_path):
 
     info_lst=[item for sublist in case_file_lst for item in sublist]
     with open(fold+case+'_info.csv', 'w+') as file:     
-    write = csv.writer(file) 
-    write.writerows(info_lst)
+    	write = csv.writer(file) 
+    	write.writerows(info_lst)
 
     with open(fold+case+'_2remove.csv', 'w') as rm:
-    wr = csv.writer(rm, delimiter=",")
-    wr.writerow(rm_pthlst)
+    	wr = csv.writer(rm, delimiter=",")
+   	wr.writerow(rm_pthlst)
