@@ -27,7 +27,7 @@ All the modules in HPC needed for this process are:
 
 1.  Extract raw transcript and audio files with `get_icsi_data.py` locally (since HPC cluster does not support web scraping). 
 
-2.  Transfer `icsi_data` folder, containing subfolders `raw_transcripts` and `raw_audio`    to HPC cluster.
+2.  Transfer `icsi_data` folder, containing subfolders `raw_transcripts` and `raw_audio` to HPC cluster.
 
 3.  Run `create_icsi_dataset.py` to create speaker folders for every speaker encountered, located as `./icsi_data/icsi_files`. Each speaker folder will contain [start_time end_time transcript_text] as .txt file, and corresponding audio files for audio segments as .wav.
 
@@ -35,7 +35,7 @@ All the modules in HPC needed for this process are:
 
 5.  Place config folder in `./icsi_data/`. Update config file to point to location of unprocessed data; should be: `./icsi_data/icsi_files/`.
 
-6.  Run `data_preprocess.py` to create `train_tisv` and `test_tisv` folders. Train/test will automatically split 90/10. During script run, note output of speaker # showing numpy files containing 0 length arrays. 
+6.  Run `data_preprocess.py` from `TIMIT` folder in git repo to create `train_tisv` and `test_tisv` folders. Train/test will automatically split 90/10. During script run, note output of speaker # showing numpy files containing 0 length arrays. 
 
 7.  If there are speakers with 0 length arrays, find out which speaker name (folder) it belongs to by running `check_file.py`.
 
@@ -48,3 +48,7 @@ All the modules in HPC needed for this process are:
         c. speaker0.npy  (speaker folder: me907) - TEST
         
 8.  Remove these speaker names (folders) from the unprocessed data location, and remove corresponding numpy speaker files from processed data location.
+
+Additional Notes:
+
+1.  Modifications to .py files when running on Prince: remove exist_ok in `data_preprocess.py` script from `TIMIT` folder
