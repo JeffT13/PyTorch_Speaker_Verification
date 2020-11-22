@@ -3,7 +3,7 @@
 
 Implementation of speech embedding net and loss (described [here](https://arxiv.org/pdf/1710.10467.pdf)). Original implementation by HarryVolek utilizes the [TIMIT dataset](https://github.com/philipperemy/timit) for training the speech embedder. We add the [ISCI database]() to the speech embedding net training and convert the Supreme Court of the United States (SCOTUS) oral arguments into a d-vectors for the speaker diarization model found at [uisrnn](https://github.com/google/uis-rnn). Dataset parameters are handled in isolated config files.   
 
-Adapted by Sophia Tsilerides, Jeffrey Tumminia, Amanda Kuznecov, Ilana Weinstein as part of NYU Center for Data Science Capstone Project. Research mentored by Prof. Aaron Kaufman. Computational resources provided by NYU Prince HPC.  
+Adapted by Jeffrey Tumminia, Sophia Tsilerides, Amanda Kuznecov, Ilana Weinstein as part of NYU Center for Data Science Capstone Project. Research mentored by Prof. Aaron Kaufman. Computational resources provided by NYU Prince HPC.  
 
 
 # Dependencies
