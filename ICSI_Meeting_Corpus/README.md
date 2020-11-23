@@ -23,7 +23,7 @@ All the modules in HPC needed for this process are:
 
 `module load librosa/intel/0.5.0`
 
-### Instructions
+### Pre-Processing Instructions
 
 1.  Extract raw transcript and audio files with `get_icsi_data.py` locally (since HPC cluster does not support web scraping). 
 
@@ -33,7 +33,7 @@ All the modules in HPC needed for this process are:
 
 4.  Run `del_small_files.py` to remove .wav files that are <40KB, as well as with their corresponding .txt files by running `del_small_files.py`. These audio files are too small to process; buffer is too short and it is likely one or less words spoken which will not be picked up by VAD.
 
-5.  Place config folder in `./icsi_data/`. Update config file to point to location of unprocessed data; should be: `./icsi_data/icsi_files/`.
+5.  Place `config` folder containing `config_ICSI.yaml` in `./icsi_data/`.
 
 6.  Run `data_preprocess.py` from `TIMIT` folder in git repo to create `train_tisv` and `test_tisv` folders. Train/test will automatically split 90/10. During script run, note output of speaker # showing numpy files containing 0 length arrays. 
 
@@ -52,3 +52,5 @@ All the modules in HPC needed for this process are:
 Additional Notes:
 
 1.  Modifications to .py files when running on Prince: remove exist_ok in `data_preprocess.py` script from `TIMIT` folder
+
+### Fine-Tuning Speech Embedder Instructions
