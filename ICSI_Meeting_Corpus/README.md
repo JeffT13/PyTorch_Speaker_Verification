@@ -7,7 +7,7 @@ ICSI Meeting Corpus License: http://groups.inf.ed.ac.uk/ami/icsi/license.shtml
 
 ### Prerequisites 
 
-Most of our computing is done on an HCP that does not support the requests package and therefore the script `get_icsi_data.py` is done locally, and files are transferred to the HPC cluster manually.
+Most of our computing is done on an HPC that does not support the requests package and therefore the script `get_icsi_data.py` is done locally, and files are transferred to the HPC cluster manually.
 
 All the modules in HPC needed for this process are:
 
