@@ -17,11 +17,7 @@ Adapted by Jeffrey Tumminia, Sophia Tsilerides, Amanda Kuznecov, Ilana Weinstein
 
 # `SpeechEmbedder` Training
 
-We follow the original implementation by HarryVolek to train the speech embedding network on the TIMIT dataset. Instructions for data preprocessing and training can be found in TIMIT README (which is the original repo README).   
-
-### ISCI
-
-follows similar implementation to TIMIT. Uses l `config/...`
+We follow the original implementation by HarryVolek to train the speech embedding network on the TIMIT dataset. Instructions for data preprocessing and training can be found in TIMIT README (which is the original repo README). Additional fine-tuning was performed using the ICSI Meeting Corpus (instructions in ICSI_Meeting_Corpus README).  
 
 ## Performance 
 
