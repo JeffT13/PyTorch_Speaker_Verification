@@ -61,3 +61,4 @@ class Hparam(Dotdict):
 hparam = Hparam()
 
 hparam_SCOTUS = Hparam(file='config/config_SCOTUS.yaml')
+hparam_ICSI = Hparam(file='config/config_ICSI.yaml')
