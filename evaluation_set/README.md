@@ -6,7 +6,7 @@ Using LibriSpeech3 dataset for evaluating diarization model (https://github.com/
 
 ### Prerequisites 
 
-####Downloading LibriSpeech3
+###Downloading LibriSpeech3
 
 Most of our computing is done on an HPC that does not support the requests package and therefore downloading the LibriSpeech3 data was done locally, and files are transferred to the HPC cluster manually.
 
@@ -30,7 +30,7 @@ The specific folder containing the test set was downloaded using sparse checkout
 5.  Download repo
     git pull origin master
     
-####HPC Prerequisities
+###HPC Prerequisities
 
 All the modules in HPC needed for this process are:
 
@@ -52,4 +52,4 @@ All the modules in HPC needed for this process are:
 
 3.  Place `librispeech_process.py` script in `./librispeech` folder.
 
-4.  Run `./librispeech_process.py' to create `speakers` folder to store each speaker as a subfolder containing [start_time end_time] as .txt file, and corresponding audio files for audio segments as .wav.
+4.  Run `./librispeech_process.py` to create `speakers` folder to store each speaker as a subfolder containing [start_time end_time] as .txt file, and corresponding audio files for audio segments as .wav.
