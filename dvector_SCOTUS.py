@@ -118,6 +118,10 @@ Saves
 
 for i, folder in enumerate(case_path):
     case = folder.split('/')[-1]
+    if os.path.exists(hp.data.save_path+case):
+        if verbose:
+            print("Skipped case:", case)
+        continue
     if verbose:
         print("Processing case:", case)
 

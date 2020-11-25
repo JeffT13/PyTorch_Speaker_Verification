@@ -59,6 +59,5 @@ class Hparam(Dotdict):
 
         
 hparam = Hparam()
-
-hparam_SCOTUS = Hparam(file='config/config_SCOTUS.yaml')
-hparam_ICSI = Hparam(file='config/config_ICSI.yaml')
+hparam_SCOTUS = Hparam(file='~/SCOTUS_Speaker_Verification/config/config_SCOTUS.yaml')
+hparam_ICSI = Hparam(file='~/SCOTUS_Speaker_Verification/config/config_ICSI.yaml')
