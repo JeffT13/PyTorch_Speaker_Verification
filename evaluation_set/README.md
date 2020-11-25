@@ -19,17 +19,23 @@ The specific folder containing the test set was downloaded using sparse checkout
     cd librispeech
     
 2.  Set up a git repo
+
     git init
+    
     git remote add origin https://github.com/EMRAI/emrai-synthetic-diarization-corpus
 
 3.  Configure git-repo to download only specific directories
+
     git config core.sparseCheckout true
 
 4.  Set the folder to the test_clean folder (do this step for both audio files and ctms (diarizations)
+
     echo "librispeech3/test_clean/wavs" > .git/info/sparse-checkout 
+    
     echo "librispeech3/test_clean/ctms" > .git/info/sparse-checkout
 
 5.  Download repo
+
     git pull origin master
     
 #### HPC Prerequisities
