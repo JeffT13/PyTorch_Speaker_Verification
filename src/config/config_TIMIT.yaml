@@ -3,9 +3,9 @@ device: "cuda"
 unprocessed_data: './TIMIT/*/*/*/*.wav' #NEEDS TO CHANGE
 ---
 data:
-    train_path: './train_tisv'
+    train_path: '/scratch/smt570/diarization/timit_data/train_tisv'
     train_path_unprocessed: './TIMIT/TRAIN/*/*/*.wav'
-    test_path: './test_tisv'
+    test_path: '/scratch/smt570/diarization/timit_data/test_tisv'
     test_path_unprocessed: './TIMIT/TEST/*/*/*.wav'
     data_preprocessed: !!bool "true" 
     sr: 16000
@@ -19,7 +19,7 @@ model:
     hidden: 768 #Number of LSTM hidden layer units
     num_layer: 3 #Number of LSTM layers
     proj: 256 #Embedding size
-    model_path: './model.model' #Model path for testing, inference, or resuming training
+    model_path: '/scratch/igw212/capstone/CDS-Capstone-2020/colab_diarization//model.model' #Model path for testing, inference, or resuming training
 ---
 train:
     N : 4 #Number of speakers in batch
@@ -28,13 +28,13 @@ train:
     lr: 0.01 
     epochs: 950 #Max training speaker epoch 
     log_interval: 30 #Epochs before printing progress
-    log_file: './speech_id_checkpoint/Stats'
+    log_file: '/scratch/jt2565/speech_id_checkpoint/Stats'
     checkpoint_interval: 120 #Save model after x speaker epochs
-    checkpoint_dir: './speech_id_checkpoint'
-    restore: !!bool "false" #Resume training from previous model path
+    checkpoint_dir: '/scratch/jt2565/speech_id_checkpoint'
+    restore: !!bool "True" #Resume training from previous model path
 ---
 test:
     N : 4 #Number of speakers in batch
     M : 6 #Number of utterances per speaker
-    num_workers: 8 #number of workers for data laoder
+    num_workers: 0 #number of workers for data laoder
     epochs: 10 #testing speaker epochs
