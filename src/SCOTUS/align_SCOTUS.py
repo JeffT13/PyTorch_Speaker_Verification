@@ -4,6 +4,7 @@ import glob
 import csv
 import os
 import numpy as np
+sys.path.append("./SpeakerVerificationEmbedding/src")
 from hparam import hparam_SCOTUS as hp
 
  

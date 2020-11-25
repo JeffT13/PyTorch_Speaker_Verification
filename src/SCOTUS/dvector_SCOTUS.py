@@ -26,7 +26,10 @@ import os
 import torch
 import json
 import csv
+import sys
 
+#assumes you are calling SVE repo from outside (ie LegalSpeech repo)
+sys.path.append("./SpeakerVerificationEmbedding/src")
 from hparam import hparam_SCOTUS as hp
 from speech_embedder_net import SpeechEmbedder
 from VAD_segments import VAD_chunk
@@ -86,6 +89,7 @@ def align_embeddings(embeddings):
 
 #initialize SpeechEmbedder
 embedder_net = SpeechEmbedder()
+print(hp.model.model_path)
 embedder_net.load_state_dict(torch.load(hp.model.model_path))
 embedder_net.to(hp.device)
 
@@ -118,10 +122,13 @@ Saves
 
 for i, folder in enumerate(case_path):
     case = folder.split('/')[-1]
+    
+    #Skip case if already processed
     if os.path.exists(hp.data.save_path+case):
         if verbose:
             print("Skipped case:", case)
         continue
+        
     if verbose:
         print("Processing case:", case)
 

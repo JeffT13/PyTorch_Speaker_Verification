@@ -46,7 +46,7 @@ class Dotdict(dict):
 
 class Hparam(Dotdict):
 
-    def __init__(self, file='config/config.yaml'):
+    def __init__(self, file='SpeakerVerificationEmbedding/src/config/config_TIMIT.yaml'):
         super(Dotdict, self).__init__()
         hp_dict = load_hparam(file)
         hp_dotdict = Dotdict(hp_dict)
@@ -58,6 +58,7 @@ class Hparam(Dotdict):
     __delattr__ = Dotdict.__delitem__
 
         
-hparam = Hparam()
-hparam_SCOTUS = Hparam(file='~/SCOTUS_Speaker_Verification/config/config_SCOTUS.yaml')
-hparam_ICSI = Hparam(file='~/SCOTUS_Speaker_Verification/config/config_ICSI.yaml')
+hparam = Hparam() #TIMIT
+hparam_SCOTUS = Hparam(file='SpeakerVerificationEmbedding/src/config/config_SCOTUS.yaml')
+hparam_ICSI = Hparam(file='SpeakerVerificationEmbedding/src/config/config_ICSI.yaml')
+#hparam_Libre = Hparam(file='SpeakerVerificationEmbedding/src/config/config_Libre.yaml')
