@@ -13,7 +13,9 @@ Most of our computing is done on an HPC that does not support the requests packa
 The specific folder containing the test set was downloaded using sparse checkout. This can be done using the following steps dervied from https://stackoverflow.com/questions/33066582/how-to-download-a-folder-from-github?noredirect=1&lq=1:
 
 1.  Create a directory
+
     mkdir librispeech
+    
     cd librispeech
     
 2.  Set up a git repo
