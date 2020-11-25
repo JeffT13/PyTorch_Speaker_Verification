@@ -3,7 +3,7 @@ device: "cuda"
 unprocessed_data: './TIMIT/*/*/*/*.wav' #NEEDS TO CHANGE
 ---
 data:
-    train_path: '/scratch/smt570/diarization/timit_data/train_tisv'
+    train_path: '/scratch/igw212/capstone/CDS-Capstone-2020/colab_diarization/train_tisv'
     train_path_unprocessed: './TIMIT/TRAIN/*/*/*.wav'
     test_path: '/scratch/igw212/capstone/CDS-Capstone-2020/colab_diarization/test_tisv'
     test_path_unprocessed: './TIMIT/TEST/*/*/*.wav'
