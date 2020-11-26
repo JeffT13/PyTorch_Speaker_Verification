@@ -60,4 +60,4 @@ All the modules in HPC needed for this process are:
 
 3.  Place `librispeech_process.py` script in `./librispeech` folder.
 
-4.  Run `./librispeech_process.py` to create `speakers` folder to store each speaker as a subfolder containing [start_time end_time] as .txt file, and corresponding audio files for audio segments as .wav.
+4.  Run `librispeech_process.py` to create `books` folders for each book in the test set. Each book in the subfolder will store speakers as folders. These speaker folders will contain files of audio segments where [start_time end_time] is saved as .txt file, and corresponding .wav files are also saved. The directory will look like this: `./librispeech/books/Book_X/Speaker_Y` and will contain audio segment files and text files.
