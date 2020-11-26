@@ -1,8 +1,8 @@
 device: "cuda"
-unprocessed_data: '/scratch/anr431/capstone/librispeech/*/*' #case subsection
+unprocessed_data: '/scratch/anr431/capstone/librispeech/books/*/*' #case subsection
 ---
 data:
-    main_path: '/scratch/anr431/capstone/librispeech/'
+    main_path: '/scratch/anr431/capstone/librispeech/books'
     save_path: '/scratch/jt2565/Libri_Processed/'
     verbose: !!bool "true"
     sr: 16000
