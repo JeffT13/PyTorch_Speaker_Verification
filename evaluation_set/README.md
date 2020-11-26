@@ -58,8 +58,10 @@ All the modules in HPC needed for this process are:
 
 2.  Place downloaded LibriSpeech3 diarized .ctm files in `./librispeech/diarization` folder on HPC.
 
-3.  Place `rename_audiofiles.py`, `rename_ctmfiles.py` and `librispeech_process_new.py` scripts in `./` folder (the current working directory).
+3.  Place all scripts in `./` folder (the current working directory).
 
 4.  Run `rename_audiofiles.py` and `rename_ctmfiles.py` to remove periods within the file names.
 
-5.  Run `librispeech_process_new.py` to create `books` folders for each book in the test set. Each book in the subfolder will store speakers as folders. These speaker folders will contain files of audio segments where [start_time end_time] is saved as .txt file, and corresponding .wav files are also saved. The directory will look like this: `./librispeech/books/Book_X/Speaker_Y` and will contain audio segment files and text files.
+5.  Run `librispeech_process_new.py` to create `books` folders for each book in the test set. Each book in the subfolder will store speakers as folders. These speaker folders will contain files of audio segments where [start_time end_time] is saved as .txt file, and corresponding .wav files are also saved. The directory will look like this: `./librispeech/books/Book_X/speaker_id` and will contain audio segment files and text files.
+
+6.  Run `del_small_libri.py` to remove .wav files that are <40KB, as well as with their corresponding .txt files. These audio files are too small to process; buffer is too short and it is likely one or less words spoken which will not be picked up by VAD.
