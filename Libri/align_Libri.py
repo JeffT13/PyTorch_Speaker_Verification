@@ -15,12 +15,14 @@ verbose = hp.data.verbose
 # Reconstructs alignments and labels in order
 for i, folder in enumerate(book_path):
     book = folder.split('/')[-1]
+    
+    '''
     #Skip book if already aligned
     if os.path.exists(folder+'/'+book+'_sequence.npy'):
         if verbose:
             print("Skipped book:", book)
         continue
-        
+    '''    
     if verbose:
         print("Aligning book ", book)
       
@@ -39,9 +41,11 @@ for i, folder in enumerate(book_path):
         sizetemp+=int(s)
         temp_lst.append(temp_sequence[int(j)][int(i)])
         temp_id_lst.append(temp_cluster_id[int(j)][int(i)])
-      
-    book_emb = np.concatenate(temp_lst, axis=0)
-    book_label = np.concatenate(temp_id_lst, axis=0)
+    
+    book_emb = np.asarray(temp_lst)
+    book_label = np.asarray(temp_id_lst)    
+    #book_emb = np.concatenate(temp_lst, axis=0)
+    #book_label = np.concatenate(temp_id_lst, axis=0)
       
     if verbose:
         print("Expected Sequence Shape:", sizetemp, " X ", hp.model.proj)

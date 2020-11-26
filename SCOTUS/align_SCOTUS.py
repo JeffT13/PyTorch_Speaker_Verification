@@ -15,8 +15,9 @@ verbose = hp.data.verbose
 # Reconstructs alignments and labels in order
 for i, folder in enumerate(case_path):
     case = folder.split('/')[-1]
-    #Skip case if already aligned
+
     '''
+    #Skip case if already aligned
     if os.path.exists(folder+'/'+case[:-7]+'_sequence.npy'):
         if verbose:
             print("Skipped case:", case)

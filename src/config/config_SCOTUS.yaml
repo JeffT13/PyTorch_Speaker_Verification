@@ -3,7 +3,7 @@ unprocessed_data: '/scratch/smt570/SCOTUS_full/wavs/SCOTUS/*/*' #case subsection
 ---
 data:
     main_path: '/scratch/smt570/SCOTUS_full/wavs/SCOTUS/'
-    save_path: './LegalUISRNN/data/SCOTUS_Processed/'
+    save_path: '/scratch/jt2565/SCOTUS_Processed/'
     verbose: !!bool "true"
     sr: 16000
     nfft: 512 #For mel spectrogram preprocess
