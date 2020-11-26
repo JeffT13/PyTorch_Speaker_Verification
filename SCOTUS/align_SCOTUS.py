@@ -16,10 +16,12 @@ verbose = hp.data.verbose
 for i, folder in enumerate(case_path):
     case = folder.split('/')[-1]
     #Skip case if already aligned
+    '''
     if os.path.exists(folder+'/'+case[:-7]+'_sequence.npy'):
         if verbose:
             print("Skipped case:", case)
         continue
+    '''
         
     if verbose:
         print("Aligning case ", case[:-7])
@@ -39,9 +41,12 @@ for i, folder in enumerate(case_path):
         sizetemp+=int(s)
         temp_lst.append(temp_sequence[int(j)][int(i)])
         temp_id_lst.append(temp_cluster_id[int(j)][int(i)])
-      
-    case_emb = np.concatenate(temp_lst, axis=0)
-    case_label = np.concatenate(temp_id_lst, axis=0)
+    
+
+    case_emb = np.asarray(temp_lst)
+    case_label = np.asarray(temp_id_lst)
+    #case_emb = np.concatenate(temp_lst, axis=0)
+    #case_label = np.concatenate(temp_id_lst, axis=0)
       
     if verbose:
         print("Expected Sequence Shape:", sizetemp, " X ", hp.model.proj)
@@ -51,6 +56,7 @@ for i, folder in enumerate(case_path):
         
     np.save(folder+'/'+case[:-7]+'_sequence.npy', case_emb)
     np.save(folder+'/'+case[:-7]+'_cluster_id.npy', case_label)
+
   
   
   
