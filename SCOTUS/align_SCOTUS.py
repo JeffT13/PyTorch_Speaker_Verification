@@ -16,7 +16,7 @@ verbose = hp.data.verbose
 for i, folder in enumerate(case_path):
     case = folder.split('/')[-1]
     #Skip case if already aligned
-    if os.path.exists(hp.data.save_path+case):
+    if os.path.exists(folder+'/'+case[:-7]+'_sequence.npy'):
         if verbose:
             print("Skipped case:", case)
         continue
@@ -27,6 +27,7 @@ for i, folder in enumerate(case_path):
     with open(folder+'/'+case+'_info.csv') as f:
         reader = csv.reader(f)
         path = list(reader)
+    
     srtlst = sorted(path, key=lambda x: x[0])
     temp_sequence = np.load(folder+'/'+case+'_embarr.npy', allow_pickle=True)
     temp_cluster_id = np.load(folder+'/'+case+'_labelarr.npy', allow_pickle=True)
