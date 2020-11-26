@@ -30,62 +30,12 @@ import sys
 
 #assumes you are calling SVE repo from outside (ie LegalSpeech repo)
 sys.path.append("./SpeakerVerificationEmbedding/src")
+
 from hparam import hparam_Libri as hp
 from speech_embedder_net import SpeechEmbedder
 from VAD_segments import VAD_chunk
+from utils import concat_segs, get_STFTs, align_embeddings
 
-
-def concat_segs(times, segs):
-    #Concatenate continuous voiced segments
-    concat_seg = []
-    seg_concat = segs[0]
-    for i in range(0, len(times)-1):
-        if times[i][1] == times[i+1][0]:
-            seg_concat = np.concatenate((seg_concat, segs[i+1]))
-        else:
-            concat_seg.append(seg_concat)
-            seg_concat = segs[i+1]
-    else:
-        concat_seg.append(seg_concat)
-    return concat_seg
-
-def get_STFTs(segs):
-    #Get 240ms STFT windows with 50% overlap
-    sr = hp.data.sr
-    STFT_frames = []
-    for seg in segs:
-        S = librosa.core.stft(y=seg, n_fft=hp.data.nfft,
-                              win_length=int(hp.data.window * sr), hop_length=int(hp.data.hop * sr))
-        S = np.abs(S)**2
-        mel_basis = librosa.filters.mel(sr, n_fft=hp.data.nfft, n_mels=hp.data.nmels)
-        S = np.log10(np.dot(mel_basis, S) + 1e-6)           # log mel spectrogram of utterances
-        for j in range(0, S.shape[1], int(.12/hp.data.hop)):
-            if j + 24 < S.shape[1]:
-                STFT_frames.append(S[:,j:j+24])
-            else:
-                break
-    return STFT_frames
-
-def align_embeddings(embeddings):
-    partitions = []
-    start = 0
-    end = 0
-    j = 1
-    for i, embedding in enumerate(embeddings):
-        if (i*.12)+.24 < j*.401:
-            end = end + 1
-        else:
-            partitions.append((start,end))
-            start = end
-            end = end + 1
-            j += 1
-    else:
-        partitions.append((start,end))
-    avg_embeddings = np.zeros((len(partitions),256))
-    for i, partition in enumerate(partitions):
-        avg_embeddings[i] = np.average(embeddings[partition[0]:partition[1]],axis=0) 
-    return avg_embeddings
-    
 
 #initialize SpeechEmbedder
 embedder_net = SpeechEmbedder()
@@ -148,15 +98,20 @@ for i, folder in enumerate(bk_path):
             if file[-4:] == '.wav':
                 if verbose:
                     print('processing file', file)
+                    print('fullpath', folder+'/'+spkr_name+'/'+file)
                 times, segs = VAD_chunk(2, folder+'/'+spkr_name+'/'+file)
 
                 # Bad .wav detection
                 if segs == []:
+                    if verbose:
+                        print("Bad wav")
                     rm_pthlst.append(folder+'/'+file)
                     continue
 
                 concat_seg = concat_segs(times, segs)
                 if len(concat_seg)<min_va:
+                    if verbose:
+                        print("short wav")
                     rm_pthlst.append(folder+'/'+file)
                     continue
 
@@ -166,6 +121,8 @@ for i, folder in enumerate(bk_path):
                 STFT_frames = STFT_frames.to(hp.device)
                 embeddings = embedder_net(STFT_frames)
                 aligned_embeddings = align_embeddings(embeddings.detach().cpu().numpy())
+                if verbose:
+                    print('shape:', np.shape(aligned_embeddings))
 
                 spkr_sequence.append(aligned_embeddings)
                 spkr_cluster_id = []
@@ -180,7 +137,9 @@ for i, folder in enumerate(bk_path):
                 spkr_file_lst.append((f[0], f[1], np.shape(aligned_embeddings)[0], filecount, spkrtracker))
                 spkr_cluster_lst.append(spkr_cluster_id)
                 filecount = filecount + 1
-
+             break
+        break
+    break
         if verbose:
             print('Processed', filecount, 'files for Book', bk, 'for spkr', spkr_name)
         bk_file_lst.append(spkr_file_lst)
@@ -207,5 +166,5 @@ for i, folder in enumerate(bk_path):
         write.writerows(info_lst)
 
     with open(fold+bk+'_2remove.csv', 'w') as rm:
-        wr = csv.writer(rm, delimiter=",")
+        wr = csv.writer(rm, delimiter="\n")
         wr.writerow(rm_pthlst)
