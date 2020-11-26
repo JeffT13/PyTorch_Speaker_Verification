@@ -135,8 +135,7 @@ for i, folder in enumerate(bk_path):
                 f = f.read().split(" ")
                 spkr_file_lst.append((f[0], f[1], np.shape(aligned_embeddings)[0], filecount, spkrtracker))
                 spkr_cluster_lst.append(spkr_cluster_id)
-                filecount = filecount + 1
-            break
+                filecount = filecount + 1          
         break
     break
 

@@ -29,7 +29,6 @@ import csv
 import sys
 
 #assumes you are calling SVE repo from outside (ie LegalSpeech repo)
-#sys.path.append("./SpeakerVerificationEmbedding")
 sys.path.append("./SpeakerVerificationEmbedding/src")
 
 from hparam import hparam_SCOTUS as hp
