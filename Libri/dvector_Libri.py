@@ -140,6 +140,9 @@ for i, folder in enumerate(bk_path):
         break
     break
 break
+
+
+if False:
         if verbose:
             print('Processed', filecount, 'files for Book', bk, 'for spkr', spkr_name)
         bk_file_lst.append(spkr_file_lst)
