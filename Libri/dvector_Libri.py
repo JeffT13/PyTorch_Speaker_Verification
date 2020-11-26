@@ -36,7 +36,6 @@ from speech_embedder_net import SpeechEmbedder
 from VAD_segments import VAD_chunk
 from utils import concat_segs, get_STFTs, align_embeddings
 
-
 #initialize SpeechEmbedder
 embedder_net = SpeechEmbedder()
 print(hp.model.model_path)
@@ -68,7 +67,7 @@ Saves
 for i, folder in enumerate(bk_path):
     bk = folder.split('/')[-1]
     
-    #Skip case if already processed
+    #Skip book if already processed
     if os.path.exists(hp.data.save_path+bk):
         if verbose:
             print("Skipped bk:", bk)
