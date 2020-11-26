@@ -1,4 +1,6 @@
-## Evaluation Set
+# LibriSpeech Speaker Verification
+
+## UIS-RNN Evaluation Set
 
 ### Details
 Using LibriSpeech3 dataset for evaluating diarization model (https://github.com/EMRAI/emrai-synthetic-diarization-corpus) . 
@@ -61,3 +63,6 @@ All the modules in HPC needed for this process are:
 3.  Place `librispeech_process.py` script in `./librispeech` folder.
 
 4.  Run `./librispeech_process.py` to create `speakers` folder to store each speaker as a subfolder containing [start_time end_time] as .txt file, and corresponding audio files for audio segments as .wav.
+
+
+## D-vector embedding
