@@ -61,4 +61,4 @@ class Hparam(Dotdict):
 hparam = Hparam() #TIMIT
 hparam_SCOTUS = Hparam(file='SpeakerVerificationEmbedding/src/config/config_SCOTUS.yaml')
 hparam_ICSI = Hparam(file='SpeakerVerificationEmbedding/src/config/config_ICSI.yaml')
-#hparam_Libre = Hparam(file='SpeakerVerificationEmbedding/src/config/config_Libre.yaml')
+hparam_Libre = Hparam(file='SpeakerVerificationEmbedding/src/config/config_Libre.yaml')
