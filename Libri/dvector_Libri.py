@@ -137,12 +137,13 @@ for i, folder in enumerate(bk_path):
                 spkr_file_lst.append((f[0], f[1], np.shape(aligned_embeddings)[0], filecount, spkrtracker))
                 spkr_cluster_lst.append(spkr_cluster_id)
                 filecount = filecount + 1
+            break
         break
     break
-break
 
 
 if False:
+    if False:
         if verbose:
             print('Processed', filecount, 'files for Book', bk, 'for spkr', spkr_name)
         bk_file_lst.append(spkr_file_lst)
