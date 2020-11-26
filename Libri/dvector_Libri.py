@@ -146,6 +146,8 @@ for i, folder in enumerate(bk_path):
 
         for file in os.listdir(folder+'/'+spkr_name):
             if file[-4:] == '.wav':
+                if verbose:
+                    print('processing file', file)
                 times, segs = VAD_chunk(2, folder+'/'+spkr_name+'/'+file)
 
                 # Bad .wav detection
@@ -172,7 +174,7 @@ for i, folder in enumerate(bk_path):
 
                 #Track full names of processed wav files
                 pth = file.split(".")[0]+'.txt'
-                pth = case+'/'+spkr_name+'/'+pth
+                pth = bk+'/'+spkr_name+'/'+pth
                 f = open(hp.data.main_path+pth, 'r')
                 f = f.read().split(" ")
                 spkr_file_lst.append((f[0], f[1], np.shape(aligned_embeddings)[0], filecount, spkrtracker))
@@ -180,30 +182,30 @@ for i, folder in enumerate(bk_path):
                 filecount = filecount + 1
 
         if verbose:
-            print('Processed', filecount, 'files for case', bk, 'for spkr', spkr_name)
+            print('Processed', filecount, 'files for Book', bk, 'for spkr', spkr_name)
         bk_file_lst.append(spkr_file_lst)
         bk_sequence.append(spkr_sequence)
         bk_cluster_id.append(spkr_cluster_lst)
         spkrtracker+=1
 
     if verbose:
-        print('Handled', spkrtracker, 'speakers for case', case)
-        print('saving case sequence', case)
+        print('Handled', spkrtracker, 'speakers for book', bk)
+        print('saving bk sequence', bk)
 
-    fold = hp.data.save_path+case+'/'
+    fold = hp.data.save_path+bk+'/'
     if not os.path.exists(fold):
         os.makedirs(fold)
-    temp_sequence = np.asarray(case_sequence, dtype='object')
-    temp_cluster_id = np.asarray(case_cluster_id, dtype='object')
-    np.save(fold+case+'_embarr',temp_sequence)
-    np.save(fold+case+'_labelarr',temp_cluster_id)
+    temp_sequence = np.asarray(bk_sequence, dtype='object')
+    temp_cluster_id = np.asarray(bk_cluster_id, dtype='object')
+    np.save(fold+bk+'_embarr',temp_sequence)
+    np.save(fold+bk+'_labelarr',temp_cluster_id)
 
 
-    info_lst=[item for sublist in case_file_lst for item in sublist]
-    with open(fold+case+'_info.csv', 'w+') as file:     
+    info_lst=[item for sublist in bk_file_lst for item in sublist]
+    with open(fold+bk+'_info.csv', 'w+') as file:     
         write = csv.writer(file) 
         write.writerows(info_lst)
 
-    with open(fold+case+'_2remove.csv', 'w') as rm:
+    with open(fold+bk+'_2remove.csv', 'w') as rm:
         wr = csv.writer(rm, delimiter=",")
         wr.writerow(rm_pthlst)
