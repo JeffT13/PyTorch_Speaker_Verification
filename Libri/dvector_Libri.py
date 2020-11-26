@@ -30,7 +30,7 @@ import sys
 
 #assumes you are calling SVE repo from outside (ie LegalSpeech repo)
 sys.path.append("./SpeakerVerificationEmbedding/src")
-from hparam import hparam_Libre as hp
+from hparam import hparam_Libri as hp
 from speech_embedder_net import SpeechEmbedder
 from VAD_segments import VAD_chunk
 

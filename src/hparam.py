@@ -61,4 +61,4 @@ class Hparam(Dotdict):
 hparam = Hparam() #TIMIT
 hparam_SCOTUS = Hparam(file=config_fp+'/config_SCOTUS.yaml')
 hparam_ICSI = Hparam(file=config_fp+'/config_ICSI.yaml')
-hparam_Libre = Hparam(file=config_fp+'/config_Libre.yaml')
+hparam_Libri = Hparam(file=config_fp+'/config_Libri.yaml')

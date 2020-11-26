@@ -3,7 +3,7 @@ unprocessed_data: '/scratch/anr431/capstone/librispeech/*/*' #case subsection
 ---
 data:
     main_path: '/scratch/anr431/capstone/librispeech/'
-    save_path: '/scratch/jt2565/Libre_Processed/'
+    save_path: '/scratch/jt2565/Libri_Processed/'
     verbose: !!bool "true"
     sr: 16000
     nfft: 512 #For mel spectrogram preprocess

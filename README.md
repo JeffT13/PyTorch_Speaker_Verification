@@ -1,7 +1,7 @@
 # SpeakerVerificationEmbedding
 
 
-Implementation of speech embedding net and loss (described [here](https://arxiv.org/pdf/1710.10467.pdf)). Original implementation by HarryVolek utilizes the [TIMIT dataset](https://github.com/philipperemy/timit) for training the speech embedder and an outline to build dvector-embeddings around. We add the [ICSI database](http://groups.inf.ed.ac.uk/ami/icsi/license.shtml) to the speech embedding net training and convert the Supreme Court of the United States (SCOTUS) oral arguments and [LibreSpeech](http://www.openslr.org/12/) readings into d-vector embeddings for the [UIS-RNN](https://github.com/google/uis-rnn) speaker diarization model. 
+Implementation of speech embedding net and loss (described [here](https://arxiv.org/pdf/1710.10467.pdf)). Original implementation by HarryVolek utilizes the [TIMIT dataset](https://github.com/philipperemy/timit) for training the speech embedder and an outline to build dvector-embeddings around. We add the [ICSI database](http://groups.inf.ed.ac.uk/ami/icsi/license.shtml) to the speech embedding net training and convert the Supreme Court of the United States (SCOTUS) oral arguments and [LibriSpeech](http://www.openslr.org/12/) readings into d-vector embeddings for the [UIS-RNN](https://github.com/google/uis-rnn) speaker diarization model. 
 
 Adapted by Jeffrey Tumminia, Sophia Tsilerides, Amanda Kuznecov, Ilana Weinstein as part of NYU Center for Data Science Capstone Project. Research mentored by Prof. Aaron Kaufman. Computational resources provided by NYU Prince HPC.  
 
@@ -24,7 +24,7 @@ We utilize the following datasets
     - [TIMIT](https://github.com/philipperemy/timit)
     - [ICSI](http://groups.inf.ed.ac.uk/ami/icsi/license.shtml)
     - [SCOTUS Oyez](https://www.oyez.org/)
-    - [LibreSpeech](http://www.openslr.org/12/)
+    - [LibriSpeech](http://www.openslr.org/12/)
     
 TIMIT and ISCI are used to train `SpeechEmbedder` model. SCOTUS and Libre are datasets represented as dvectors and aligned with their diarization times to make labelled datasets for the UISRNN. Details for data preprocessing & handling are in dataset level readmes found in the folders.
     
