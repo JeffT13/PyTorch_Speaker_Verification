@@ -14,9 +14,9 @@ import sys
 from torch.utils.data import DataLoader
 
 #assumes you are calling SVE repo from outside (ie LegalSpeech repo)
-sys.path.append("./SpeakerVerificationEmbedding/src")
+sys.path.append("./SpeakerVerificationEmbedding")
 from hparam import hparam as hp
-from TIMIT.data_load import SpeakerDatasetTIMIT, SpeakerDatasetTIMITPreprocessed
+from data_load import SpeakerDatasetTIMIT, SpeakerDatasetTIMITPreprocessed
 from speech_embedder_net import SpeechEmbedder, GE2ELoss, get_centroids, get_cossim
 
 def train(model_path):
