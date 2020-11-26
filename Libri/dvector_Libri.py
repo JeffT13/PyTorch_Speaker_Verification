@@ -95,12 +95,11 @@ for i, folder in enumerate(bk_path):
         spkr_cluster_lst = []
 
         for file in os.listdir(folder+'/'+spkr_name):
+            if verbose:
+                print('processing file', file)
+                print('fullpath', folder+'/'+spkr_name+'/'+file)
             if file[-4:] == '.wav':
-                if verbose:
-                    print('processing file', file)
-                    print('fullpath', folder+'/'+spkr_name+'/'+file)
                 times, segs = VAD_chunk(2, folder+'/'+spkr_name+'/'+file)
-
                 # Bad .wav detection
                 if segs == []:
                     if verbose:
