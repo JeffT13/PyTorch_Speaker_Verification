@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ll#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Wed Dec 19 14:34:01 2018
@@ -169,5 +169,5 @@ for i, folder in enumerate(case_path):
         write.writerows(info_lst)
 
     with open(fold+case+'_2remove.csv', 'w') as rm:
-        wr = csv.writer(rm, delimiter=",")
+        wr = csv.writer(rm, delimiter="\n")
         wr.writerow(rm_pthlst)
