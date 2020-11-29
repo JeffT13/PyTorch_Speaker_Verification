@@ -168,28 +168,43 @@ for i, path in enumerate(case_path):
 
 
 fold = hp.data.save_path
+cut_div = 4
 embedder_net.eval()
 train_sequences = []
 train_cluster_ids = []
 print('starting generation')
 for i, path in enumerate(case_path):
-  print(path)
   file = path.split('/')[-1]
   if file[-4:] == '.wav':
     print(file)
     times, segs = VAD_chunk(2, path)
     concat_seg, ht = concat_segs(times, segs)
     htemp = align_times(casetimedict[file[:-4]], ht, spkr_dict)
-    if True:
+    if False:
       print(len(concat_seg))
       print(len(ht))
       print(len(htemp))
     STFT_frames, STFT_labels = get_STFTs(concat_seg, htemp)
     STFT_frames = np.stack(STFT_frames, axis=2)
     STFT_frames = torch.tensor(np.transpose(STFT_frames, axes=(2,1,0)))
-    STFT_frames = STFT_frames.to(hp.device)
-    embeddings = embedder_net(STFT_frames) #might need to split embeddings
-    aligned_embeddings, aligned_labels = align_embeddings(embeddings.detach().cpu().numpy(), STFT_labels)
+    
+    
+    cut = STFT_frames.size()[0]//cut_div
+    t0 = 0
+    temp_emb = []
+    for i in range(cut_div):
+      if i<(cut_div-1):
+        STFT_samp = STFT_frames[t0:cut, :, :]
+      else:
+        STFT_samp = STFT_frames[t0:, :, :]
+      STFT_samp = STFT_samp.to(device)
+      emb = embedder_net(STFT_samp)
+      temp_emb.append(emb.detach().cpu().numpy())
+      t0=cut
+      cut+=cut
+    embeddings = np.concatenate(temp_emb, axis=0)
+
+    aligned_embeddings, aligned_labels = align_embeddings(embeddings, STFT_labels)
     train_sequences.append(aligned_embeddings)
     train_cluster_id.append(aligned_labels)
     print('values appended')
