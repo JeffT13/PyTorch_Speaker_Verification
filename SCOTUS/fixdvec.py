@@ -164,14 +164,18 @@ for i, path in enumerate(case_path):
       filetimelist.append((float(t0),float(t1),spkr))
     casetimedict[file[:-4]] = filetimelist
 
+
+
 fold = hp.data.save_path
 embedder_net.eval()
 train_sequences = []
 train_cluster_ids = []
+print('starting generation')
 for i, path in enumerate(case_path):
+  print(path)
   file = path.split('/')[-1]
-  print(file)
   if file[-4:] == '.wav':
+    print(file)
     times, segs = VAD_chunk(2, path)
     concat_seg, ht = concat_segs(times, segs)
     htemp = align_times(casetimedict[file[:-4]], ht, spkr_dict)

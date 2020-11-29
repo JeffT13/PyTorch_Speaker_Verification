@@ -5,7 +5,7 @@
 #SBATCH --time=2:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --mem=8GB
-#SBATCH --job-name=dvec_SCOTUS
+#SBATCH --job-name=dvec
 #SBATCH --output=fix.out
 
-python SpeakerVerificationEmbedding/SCOTUS/fixdvec.py
+python ~/SpeakerVerificationEmbedding/SCOTUS/fixdvec.py

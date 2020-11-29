@@ -1,8 +1,8 @@
 device: "cuda"
-unprocessed_data: '/scratch/smt570/audio_data/wavs/SCOTUS/*/*' #case subsection
+unprocessed_data: '/scratch/jt2565/SCOTUS_cases/*/*' #case subsection
 ---
 data:
-    main_path: '/scratch/smt570/audio_data/wavs/SCOTUS/'
+    main_path: '/scratch/jt2565/SCOTUS_cases/'
     save_path: '/scratch/jt2565/newprocess/'
     verbose: !!bool "true"
     sr: 16000
