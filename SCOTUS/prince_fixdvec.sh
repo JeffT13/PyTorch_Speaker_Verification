@@ -6,6 +6,6 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=8GB
 #SBATCH --job-name=dvec_SCOTUS
-#SBATCH --output=new.out
+#SBATCH --output=fix.out
 
 python SpeakerVerificationEmbedding/SCOTUS/fixdvec.py

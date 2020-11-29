@@ -35,25 +35,6 @@ from hparam import hparam_SCOTUS as hp
 from speech_embedder_net import SpeechEmbedder
 from VAD_segments import VAD_chunk
     
-#initialize SpeechEmbedder
-embedder_net = SpeechEmbedder()
-print(hp.model.model_path)
-embedder_net.load_state_dict(torch.load(hp.model.model_path))
-embedder_net.to(hp.device)
-
-#dataset path
-case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
-
-min_va = 2 # minimum voice activity length
-label = 20 # unknown speaker label counter (leave room for 20 judges)
-
-cnt = 0 # counter for judge_dict
-judge_dict = dict()
-
-# File Use Tracking
-
-verbose = hp.data.verbose
-embedder_net.eval()
 
 def concat_segs(times, segs):
     #Concatenate continuous voiced segments
@@ -144,11 +125,16 @@ def align_times(casetimelist, hold_times, spkr_dict):
   
  
  
- 
- 
+    
 #-----------------------------
+    
+#initialize SpeechEmbedder
+embedder_net = SpeechEmbedder()
+embedder_net.load_state_dict(torch.load(hp.model.model_path))
+embedder_net.to(hp.device)
+verbose = hp.data.verbose
 
-case_path = glob.glob(os.path.dirname('drive/My Drive/prince/cases/*/*'))
+case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
 label = 20 # unknown speaker label counter (leave room for 20 judges)
 cnt = 0 # counter for judge_dict
 spkr_dict = dict()
