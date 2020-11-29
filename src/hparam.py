@@ -3,7 +3,7 @@
 
 import yaml
 
-config_fp = '~/SpeakerVerificationEmbedding/src/config'
+config_fp = './SpeakerVerificationEmbedding/src/config'
 def load_hparam(filename):
     stream = open(filename, 'r')
     docs = yaml.load_all(stream, Loader=yaml.FullLoader)
