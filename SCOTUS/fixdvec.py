@@ -118,7 +118,7 @@ def align_times(casetimelist, hold_times, spkr_dict):
           continue
       else:
         continue
-    if not append and h[1]!=ht[-1][1]:
+    if not append and h[1]!=hold_times[-1][1]:
       print('value not appended in loop')
       print(h)
   htemp.append(spkr_dict[endspkr])
@@ -133,15 +133,17 @@ def align_times(casetimelist, hold_times, spkr_dict):
 embedder_net = SpeechEmbedder()
 embedder_net.load_state_dict(torch.load(hp.model.model_path))
 embedder_net.to(hp.device)
-verbose = hp.data.verbose
+embedder_net.eval()
+
 
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
 label = 20 # unknown speaker label counter (leave room for 20 judges)
 cnt = 0 # counter for judge_dict
 spkr_dict = dict()
 casetimedict = dict()
+verbose = hp.data.verbose
 
-# Build case info dictionary
+# Build case info dictionary (could be isolated script but its quick)
 for i, path in enumerate(case_path):
   file = path.split('/')[-1]
   if file[-4:] == '.txt':
@@ -168,27 +170,28 @@ for i, path in enumerate(case_path):
 
 
 fold = hp.data.save_path
-cut_div = 3
-embedder_net.eval()
+cut_div = 4
 train_sequences = []
 train_cluster_ids = []
 print('starting generation')
 for i, path in enumerate(case_path):
+  
   file = path.split('/')[-1]
+  if os.path.exists(fold+file[:-4]+'_seq.npy'):
+    print('skipped ', file[:-4])
+    continue
   if file[-4:] == '.wav':
-    print(file)
+    print(path)
     times, segs = VAD_chunk(2, path)
     concat_seg, ht = concat_segs(times, segs)
     htemp = align_times(casetimedict[file[:-4]], ht, spkr_dict)
-    if False:
-      print(len(concat_seg))
-      print(len(ht))
-      print(len(htemp))
+    if len(ht)!=len(htemp):
+        print('bad time diarization', len(ht), len(htemp))
+        continue
     STFT_frames, STFT_labels = get_STFTs(concat_seg, htemp)
     STFT_frames = np.stack(STFT_frames, axis=2)
     STFT_frames = torch.tensor(np.transpose(STFT_frames, axes=(2,1,0)))
-    
-    
+ 
     cut = STFT_frames.size()[0]//cut_div
     t0 = 0
     temp_emb = []
@@ -197,19 +200,19 @@ for i, path in enumerate(case_path):
         STFT_samp = STFT_frames[t0:t0+cut, :, :]
       else:
         STFT_samp = STFT_frames[t0:, :, :]
+      #process slice
       STFT_samp = STFT_samp.to(hp.device)
-      print(STFT_samp.size())
       emb = embedder_net(STFT_samp)
       temp_emb.append(emb.detach().cpu().numpy())
       t0+=cut
-    embeddings = np.concatenate(temp_emb, axis=0)
 
+    embeddings = np.concatenate(temp_emb, axis=0)
     aligned_embeddings, aligned_labels = align_embeddings(embeddings, STFT_labels)
     train_sequences.append(aligned_embeddings)
     train_cluster_ids.append(aligned_labels)
     np.save(fold+file[:-4]+'_seq',  aligned_embeddings)
     np.save(fold+file[:-4]+'_id', aligned_labels)
-    print('case saved')
+    print('values appended')
 
 np.save('/scratch/jt2565/train_seq', train_sequences)
 np.save('/scratch/jt2565/train_clus', train_cluster_ids)
