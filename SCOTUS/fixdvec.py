@@ -206,10 +206,13 @@ for i, path in enumerate(case_path):
 
     aligned_embeddings, aligned_labels = align_embeddings(embeddings, STFT_labels)
     train_sequences.append(aligned_embeddings)
-    train_cluster_id.append(aligned_labels)
-    print('values appended')
+    train_cluster_ids.append(aligned_labels)
     np.save(fold+file[:-4]+'_seq',  aligned_embeddings)
     np.save(fold+file[:-4]+'_id', aligned_labels)
-    break
+    print('case saved')
+
+np.save('/scratch/jt2565/train_seq', train_sequences)
+np.save('/scratch/jt2565/train_clus', train_cluster_ids)
+
 
     
