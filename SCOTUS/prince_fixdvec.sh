@@ -8,4 +8,4 @@
 #SBATCH --job-name=dvec_SCOTUS
 #SBATCH --output=new.out
 
-python SpeakerVerificationEmbedding/SCOTUS/dfixdvec.py
+python SpeakerVerificationEmbedding/SCOTUS/fixdvec.py
