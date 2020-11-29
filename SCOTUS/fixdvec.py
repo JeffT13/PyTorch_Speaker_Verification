@@ -168,7 +168,7 @@ for i, path in enumerate(case_path):
 
 
 fold = hp.data.save_path
-cut_div = 4
+cut_div = 3
 embedder_net.eval()
 train_sequences = []
 train_cluster_ids = []
@@ -194,14 +194,14 @@ for i, path in enumerate(case_path):
     temp_emb = []
     for i in range(cut_div):
       if i<(cut_div-1):
-        STFT_samp = STFT_frames[t0:cut, :, :]
+        STFT_samp = STFT_frames[t0:t0+cut, :, :]
       else:
         STFT_samp = STFT_frames[t0:, :, :]
       STFT_samp = STFT_samp.to(hp.device)
+      print(STFT_samp.size())
       emb = embedder_net(STFT_samp)
       temp_emb.append(emb.detach().cpu().numpy())
-      t0=cut
-      cut+=cut
+      t0+=cut
     embeddings = np.concatenate(temp_emb, axis=0)
 
     aligned_embeddings, aligned_labels = align_embeddings(embeddings, STFT_labels)
