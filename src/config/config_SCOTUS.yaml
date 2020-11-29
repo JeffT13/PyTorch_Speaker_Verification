@@ -1,9 +1,9 @@
 device: "cuda"
-unprocessed_data: '/scratch/smt570/SCOTUS_full/wavs/SCOTUS/*/*' #case subsection
+unprocessed_data: '/scratch/smt570/audio_data/wavs/SCOTUS/*/*' #case subsection
 ---
 data:
-    main_path: '/scratch/smt570/SCOTUS_full/wavs/SCOTUS/'
-    save_path: '/scratch/jt2565/SCOTUSfull_Processed/'
+    main_path: '/scratch/smt570/audio_data/wavs/SCOTUS/'
+    save_path: '/scratch/jt2565/newprocess/'
     verbose: !!bool "true"
     sr: 16000
     nfft: 512 #For mel spectrogram preprocess
