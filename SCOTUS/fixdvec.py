@@ -28,9 +28,10 @@ import json
 import csv
 import sys
 
-#assumes you are calling SVE repo from outside (ie LegalSpeech repo)
+#assumes SVE is located in home dir
 sys.path.append("~/SpeakerVerificationEmbedding/src")
-
+sys.path.append("./SpeakerVerificationEmbedding/src")
+sys.path.append("./src")
 from hparam import hparam_SCOTUS as hp
 from speech_embedder_net import SpeechEmbedder
 from VAD_segments import VAD_chunk
