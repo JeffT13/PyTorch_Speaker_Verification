@@ -29,7 +29,7 @@ import csv
 import sys
 
 #assumes you are calling SVE repo from outside (ie LegalSpeech repo)
-sys.path.append("./SpeakerVerificationEmbedding/src")
+sys.path.append("~/SpeakerVerificationEmbedding/src")
 
 from hparam import hparam_SCOTUS as hp
 from speech_embedder_net import SpeechEmbedder
@@ -194,5 +194,6 @@ for i, path in enumerate(case_path):
     print('values appended')
     np.save(fold+file[:-4]+'_seq',  aligned_embeddings)
     np.save(fold+file[:-4]+'_id', aligned_labels)
+    break
 
     
