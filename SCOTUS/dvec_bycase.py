@@ -91,7 +91,6 @@ for i, path in enumerate(case_path):
     print('skipped ', file[:-4])
     continue
   if file[-4:] == '.wav':
-    print(path)
     times, segs = VAD_chunk(2, path)
     concat_seg, ht = concat_segs(times, segs)
     htemp = align_times(casetimedict[file[:-4]], ht, spkr_dict)
@@ -110,8 +109,6 @@ for i, path in enumerate(case_path):
         STFT_samp = STFT_frames[t0:t0+cut, :, :]
       else:
         STFT_samp = STFT_frames[t0:, :, :]
-      if verbose:
-        print(STFT_samp.size())
       #process slice
       STFT_samp = STFT_samp.to(device)
       emb = embedder_net(STFT_samp)
