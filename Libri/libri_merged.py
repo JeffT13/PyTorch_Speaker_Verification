@@ -1,6 +1,10 @@
 import os
 from pydub import AudioSegment
 
+'''Creates structure: librispeech/books/speakers/speaker_id'''
+'''books folder only contains speakers invovled in the specific book reading'''
+'''Speaker durations are merged for the entire time they are speaking.'''
+
 path = "./librispeech/diarization"
 
 diarization = os.listdir(path)
@@ -11,10 +15,11 @@ for file in diarization:
     files.append(file)
 
 #create dir for speaker folders
-os.makedirs('./librispeech/speakers')
+os.makedirs('./librispeech/books')
 
-speak_path = './librispeech/speakers/'
+book_path = './librispeech/books/'
 
+s = 1
 for file in files:
     f = open(path+'/'+file, "r")
 
@@ -78,17 +83,55 @@ for file in files:
     merged_times.append(times[i][0]+' '+str(start_time)+' '+str(end_time))
     ####
 
-    for t in merged_times:
+    ###
+    start_time = merged_times[0].split(' ')[1]
+    end_time = merged_times[0].split(' ')[2]
+
+    new_ls = []
+
+    for t in range(len(merged_times)-1):
+        curr = merged_times[t].split(' ')[0]
+        if curr == merged_times[t+1].split(' ')[0]:
+            end_time = merged_times[t+1].split(' ')[2]
+
+        else:
+            new_ls.append(curr+' '+start_time+' '+end_time)
+            start_time = merged_times[t+1].split(' ')[1]
+            end_time = merged_times[t+1].split(' ')[2]
+
+    new_ls.append(curr+' '+start_time+' '+end_time)
+    
+    start_time = merged_times[0].split(' ')[1]
+    end_time = merged_times[0].split(' ')[2]
+
+    new_ls = []
+
+    for t in range(len(merged_times)-1):
+        curr = merged_times[t].split(' ')[0]
+        if curr == merged_times[t+1].split(' ')[0]:
+            end_time = merged_times[t+1].split(' ')[2]
+
+        else:
+            new_ls.append(curr+' '+start_time+' '+end_time)
+            start_time = merged_times[t+1].split(' ')[1]
+            end_time = merged_times[t+1].split(' ')[2]
+
+    new_ls.append(curr+' '+start_time+' '+end_time)
+
+    os.makedirs(book_path+'Book_'+str(s))
+    speak_path = book_path+'Book_'+str(s)
+    
+    for t in new_ls:
         speaker = t.split(' ')[0].split('-')[0]+'-'+t.split(' ')[0].split('-')[1]
         #if no speaker folder, create it
         if speaker not in os.listdir(speak_path):
-            os.makedirs(speak_path+speaker)
+            os.makedirs(speak_path+'/'+speaker)
 
         #create file number 
-        file_num = len(os.listdir(speak_path+speaker))+1
+        file_num = len(os.listdir(speak_path+'/'+speaker))+1
 
         #save start time, end time, transcript as .txt file in speaker folder
-        with open(speak_path+speaker+'/'+file.strip('.ctm')+'_{}.txt'.format(file_num),'w') as output:
+        with open(speak_path+'/'+speaker+'/'+file.strip('.ctm')+'_{}.txt'.format(file_num),'w') as output:
             output.write(str(t.split(' ')[1])+' '+ str(t.split(' ')[2]))
 
         #open corresponding audio file
@@ -101,6 +144,9 @@ for file in files:
         split = audio[start:end]
 
         #save audio file in speaker folder with same file number
-        split.export(speak_path+speaker+'/'+file.strip('.ctm')+'_{}.wav'.format(file_num),format='wav')
+        split.export(speak_path+'/'+speaker+'/'+file.strip('.ctm')+'_{}.wav'.format(file_num),format='wav')
 
     print('Done ' + file)
+
+    #increment folder num
+    s+=1
