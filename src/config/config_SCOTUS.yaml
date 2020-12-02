@@ -1,9 +1,9 @@
 device: "cuda"
-unprocessed_data: '/scratch/jt2565/SCOTUS_cases/*/*' #case subsection
+unprocessed_data: '/scratch/jt2565/sco50/sco50wav_cases/*/*' #case subsection
 ---
 data:
-    main_path: '/scratch/jt2565/SCOTUS_cases/'
-    save_path: '/scratch/jt2565/newprocess/'
+    main_path: '/scratch/jt2565/sco50/sco50wav_cases/'
+    save_path: '/scratch/jt2565/sco50/sco50wav_proc_case_princerun/'
     verbose: !!bool "true"
     sr: 16000
     nfft: 512 #For mel spectrogram preprocess

@@ -38,7 +38,6 @@ from utils import concat_segs, get_STFTs, align_embeddings
     
 #initialize SpeechEmbedder
 embedder_net = SpeechEmbedder()
-print(hp.model.model_path)
 embedder_net.load_state_dict(torch.load(hp.model.model_path))
 embedder_net.to(hp.device)
 
@@ -69,6 +68,7 @@ Saves
         - .csv
 '''
 
+#FOR EACH CASE
 for i, folder in enumerate(case_path):
     case = folder.split('/')[-1]
     
@@ -86,7 +86,8 @@ for i, folder in enumerate(case_path):
     case_sequence = []
     case_cluster_id = []
     spkrtracker=0
-
+    
+    #FOR EACH SPKR (segmented in preprocessing)
     for spkr_name in os.listdir(folder):
         casecount = 0
         if verbose:
@@ -107,9 +108,9 @@ for i, folder in enumerate(case_path):
         spkr_file_lst = []
         spkr_sequence = []
         spkr_cluster_lst = []
-
+        #FOR EACH UTTERANCE BY SPKR ('')
         for file in os.listdir(folder+'/'+spkr_name):
-            if file[-4:] == '.wav':
+            if file[-4:] == '.wav': #because we store .txt with .wav
                 times, segs = VAD_chunk(2, folder+'/'+spkr_name+'/'+file)
 
                 # Bad .wav detection
