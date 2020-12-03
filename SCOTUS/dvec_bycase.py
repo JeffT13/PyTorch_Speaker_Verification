@@ -43,40 +43,13 @@ embedder_net.eval()
 
 
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
-label = 20 # unknown speaker label counter (leave room for 20 judges)
-cnt = 0 # counter for judge_dict
-spkr_dict = dict()
-casetimedict = dict()
-verbose = hp.data.verbose
 
-# Build case info dictionary (could be isolated script but its quick)
-for i, path in enumerate(case_path):
-  file = path.split('/')[-1]
-  if file[-4:] == '.txt':
-    filetimelist= []
-    f= open(path,'r')
-    k=f.readlines()
-    f.close()
-    for u in k:
-      t0, t1, spkr = u.split(' ')[0:3]
-      #build speaker dictionary
-      if spkr[-14:]=='scotus_justice':
-        if spkr not in spkr_dict:
-          spkr_dict[spkr] = cnt
-          cnt+=1
-          if cnt>=20:
-            print("ERROR: NEED MORE JUDGE ROOM")
-      else:
-        if spkr not in spkr_dict:
-          spkr_dict[spkr] = label
-          label+=1         
-      filetimelist.append((float(t0),float(t1),spkr))
-    casetimedict[file[:-4]] = filetimelist
+with open(hp.data.dict_path+'spkrs.json') as json_file: 
+    spkr_dict = json.load(json_file)
+    
+with open(hp.data.dict_path+'casetimes.json') as json_file: 
+    casetimedict = json.load(json_file)
 
-#save spkr label dictionary
-#PATH MANUAL (will adapt in full run)
-with open('/scratch/jt2565/sco50/info/spkrs.json', 'w') as outfile:  
-    json.dump(spkr_dict, outfile) 
 
 fold = hp.data.save_path
 cut_div = 4
@@ -93,10 +66,18 @@ for i, path in enumerate(case_path):
   if file[-4:] == '.wav':
     times, segs = VAD_chunk(2, path)
     concat_seg, ht = concat_segs(times, segs)
+    
+    # ---
+    #assumes files will precleaned
+    #need to improve for any full case set processing
     htemp = align_times(casetimedict[file[:-4]], ht, spkr_dict)
-    if hp.data.verbose:
+    if hp.data.verbose: 
+      #if len(ht)!= len(htemp) then
+      # skip case and track case_id
       print(len(ht))
       print(len(htemp))
+    # ---  
+      
     STFT_frames, STFT_labels = get_STFTs(concat_seg, htemp)
     STFT_frames = np.stack(STFT_frames, axis=2)
     STFT_frames = torch.tensor(np.transpose(STFT_frames, axes=(2,1,0)))
