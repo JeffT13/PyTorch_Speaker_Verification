@@ -91,7 +91,7 @@ for i, path in enumerate(case_path):
       else:
         STFT_samp = STFT_frames[t0:, :, :]
       #process slice
-      STFT_samp = STFT_samp.to(device)
+      STFT_samp = STFT_samp.to(hp.device)
       emb = embedder_net(STFT_samp)
       temp_emb.append(emb.detach().cpu().numpy())
       t0+=cut
