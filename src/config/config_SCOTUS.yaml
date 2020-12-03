@@ -3,7 +3,7 @@ unprocessed_data: '/scratch/jt2565/sco50/sco50wav_cases/*/*' #case subsection
 ---
 data:
     main_path: '/scratch/jt2565/sco50/sco50wav_cases/'
-    save_path: '/scratch/jt2565/sco50/sco50wav_proc_case_princerun/TIMIT/'
+    save_path: '/scratch/jt2565/sco50/sco50wav_proc_case_princerun/ICSI/'
     dict_path: '/scratch/jt2565/sco50/info/'
     verbose: !!bool "true"
     sr: 16000
@@ -18,4 +18,4 @@ model:
     num_layer: 3 #Number of LSTM layers
     proj: 256 #Embedding size
     #model_path: '/SpeakerVerification/data/model.model/'
-    model_path: '/scratch/igw212/capstone/CDS-Capstone-2020/colab_diarization/model_og.model'  #Model path for testing, inference, or resuming training
+    model_path: '/scratch/igw212/capstone/CDS-Capstone-2020/colab_diarization/model.model'  #Model path for testing, inference, or resuming training
