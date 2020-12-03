@@ -37,7 +37,6 @@ casetimedict = dict()
 
 if os.path.exists(hp.data.dict_path+'casetimes.json'):
     print("Dictionaries already saved down")
-    break
 else:
     # Build case info dictionary
     for i, path in enumerate(case_path):
