@@ -1,12 +1,25 @@
 import os
 
-path = "./librispeech/books/"
-folders = os.listdir(path)
+rootDir = "./librispeech/speakers/"
 
-for book in folders:
-    for speaker in os.listdir(path+book):
-        for file in os.listdir(path+book+'/'+speaker):
-            if '.wav' in file:
-                if os.path.getsize(path+book+'/'+speaker+'/'+file)<40000:
-                    os.remove(path+book+'/'+speaker+'/'+file)
-                    os.remove(path+book+'/'+speaker+'/'+file.strip('.wav')+'.txt')
+def list_files(filepath, filetype):
+#    paths = []
+    for root, dirs, files in os.walk(filepath):
+        count = 0
+        for file in files:
+            
+            wav_path = os.path.join(root, file)
+            txt_path = wav_path.strip('wav')+'txt'
+            
+            if file.lower().endswith(filetype.lower()) and os.path.getsize(wav_path)<40000:
+                
+                print('wav exists:',os.path.isfile(wav_path))
+                print('txt exists:',os.path.isfile(wav_path.strip(wav)+'txt')
+                
+                os.remove(wav_path)
+                os.remove(txt_path)
+                
+                count += 1
+    print('Deleted {} wav files'.format(count))
+                      
+list_files(rootDir,'.wav')
