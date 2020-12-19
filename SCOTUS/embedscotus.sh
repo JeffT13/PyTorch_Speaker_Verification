@@ -8,4 +8,4 @@
 #SBATCH --job-name=dvcase
 #SBATCH --output=bycase.out
 
-python ~/SpeakerVerificationEmbedding/SCOTUS/dvec_bycase.py
+python ~/SpeakerVerificationEmbedding/SCOTUS/scotus_dvector_inference.py

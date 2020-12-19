@@ -3,7 +3,7 @@
 
 import yaml
 
-config_fp = './SpeakerVerificationEmbedding/src/config'
+config_fp = './SpeakerVerificationEmbedding/SpeechEmbedder'
 def load_hparam(filename):
     stream = open(filename, 'r')
     docs = yaml.load_all(stream, Loader=yaml.FullLoader)
@@ -46,7 +46,7 @@ class Dotdict(dict):
 
 class Hparam(Dotdict):
 
-    def __init__(self, file=config_fp+'/config_TIMIT.yaml'):
+    def __init__(self, file=config_fp+'config_TIMIT.yaml'):
         super(Dotdict, self).__init__()
         hp_dict = load_hparam(file)
         hp_dotdict = Dotdict(hp_dict)
@@ -60,5 +60,5 @@ class Hparam(Dotdict):
         
 hparam = Hparam() #TIMIT
 hparam_SCOTUS = Hparam(file=config_fp+'/config_SCOTUS.yaml')
-hparam_ICSI = Hparam(file=config_fp+'/config_ICSI.yaml')
-hparam_Libri = Hparam(file=config_fp+'/config_Libri.yaml')
+hparam_ICSI = Hparam(file=config_fp+'/ICSI/config_ICSI.yaml')
+hparam_Libri = Hparam(file=config_fp+'/Libri/config_Libri.yaml')
