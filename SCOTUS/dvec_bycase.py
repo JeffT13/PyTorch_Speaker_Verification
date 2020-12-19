@@ -122,7 +122,7 @@ def align_times(casetimelist, hold_times, spkr_dict):
           elif not append:
             print("labelling overlapping at ", h)
             htemp.append(999) #overlap in diarization and VAD
-            apend=True
+            append=True
     if not append and h[1]!=hold_times[-1][1]:
       print('value not appended in loop')
       print(i, h)
