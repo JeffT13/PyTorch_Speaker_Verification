@@ -31,7 +31,105 @@ sys.path.append("./SpeakerVerificationEmbedding/src")
 from hparam import hparam_SCOTUS as hp
 from speech_embedder_net import SpeechEmbedder
 from VAD_segments import VAD_chunk
-from utils import concat_segs, get_STFTs, align_embeddings, align_times
+
+#-----------------------------
+# Following functions adapted/introduced in fork
+def concat_segs(times, segs):
+    #Concatenate continuous voiced segments
+    concat_seg = []
+    seg_concat = segs[0]
+    hold_times = []
+    t0 = 0
+    for i in range(0, len(times)-1):
+        if times[i][1] == times[i+1][0]:
+            seg_concat = np.concatenate((seg_concat, segs[i+1]))
+        else:
+            hold_times.append((t0, times[i][1]))
+            t0 = times[i+1][0]
+            concat_seg.append(seg_concat)
+            seg_concat = segs[i+1]
+    else:
+        concat_seg.append(seg_concat)
+        hold_times.append((t0, times[-1][1]))
+    return concat_seg, hold_times
+
+def get_STFTs(segs,htemp):
+    #Get 240ms STFT windows with 50% overlap
+    sr = hp.data.sr
+    STFT_frames = []
+    STFT_labels = []
+    idx = 0
+    for seg in segs:
+        S = librosa.core.stft(y=seg, n_fft=hp.data.nfft,
+                              win_length=int(hp.data.window * sr), hop_length=int(hp.data.hop * sr))
+        S = np.abs(S)**2
+        mel_basis = librosa.filters.mel(sr, n_fft=hp.data.nfft, n_mels=hp.data.nmels)
+        S = np.log10(np.dot(mel_basis, S) + 1e-6)           # log mel spectrogram of utterances
+        for j in range(0, S.shape[1], int(.12/hp.data.hop)):
+            if j + 24 < S.shape[1]:
+                STFT_frames.append(S[:,j:j+24])
+                STFT_labels.append(htemp[idx])
+            else:
+                break
+        idx+=1
+    return STFT_frames, STFT_labels
+    
+def align_embeddings(embeddings, labs):
+    partitions = []
+    start = 0
+    end = 0
+    j = 1
+    for i, embedding in enumerate(embeddings):
+        if (i*.12)+.24 < j*.401:
+            end = end + 1
+        else:
+            partitions.append((start,end))
+            start = end
+            end = end + 1
+            j += 1
+    else:
+        partitions.append((start,end))
+    avg_embeddings = np.zeros((len(partitions),256))
+    emb_labels = []
+    for i, partition in enumerate(partitions):
+        emb_lab = labs[partition[0]:partition[1]]
+        if  len(set(emb_lab))>1:
+          continue
+        else:
+          avg_embeddings[i] = np.average(embeddings[partition[0]:partition[1]],axis=0) 
+          emb_labels.append(emb_lab[0])        
+    return avg_embeddings[0:len(emb_labels)], emb_labels
+
+#new function
+def align_times(casetimelist, hold_times, spkr_dict):
+  htemp = []
+  _, endtime, endspkr = casetimelist[-1]
+  for h in hold_times:
+    append = False
+    for c in casetimelist:
+      if h[1]<c[1]:
+        if h[1]>=c[0]:
+          spkr_name = c[2]
+          htemp.append(spkr_dict[spkr_name])
+          append = True
+        else:
+          continue
+      else:
+        continue
+    if not append and h[1]!=hold_times[-1][1]:
+      print('value not appended in loop')
+      print(h)
+  htemp.append(spkr_dict[endspkr])
+  return htemp
+  
+if __name__ == "__main__":
+    w = grad.Variable(torch.tensor(1.0))
+    b = grad.Variable(torch.tensor(0.0))
+    embeddings = torch.tensor([[0,1,0],[0,0,1], [0,1,0], [0,1,0], [1,0,0], [1,0,0]]).to(torch.float).reshape(3,2,3)
+    centroids = get_centroids(embeddings)
+    cossim = get_cossim(embeddings, centroids)
+    sim_matrix = w*cossim + b
+    loss, per_embedding_loss = calc_loss(sim_matrix)
  
 #-----------------------------
     

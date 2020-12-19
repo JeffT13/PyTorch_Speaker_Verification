@@ -163,32 +163,24 @@ def mfccs_and_spec(wav_file, wav_process = False, calc_mfccs=False, calc_mag_db=
     
     return mfccs, mel_db, mag_db
     
-# Following functions adapted/introduced in fork
 def concat_segs(times, segs):
     #Concatenate continuous voiced segments
     concat_seg = []
     seg_concat = segs[0]
-    hold_times = []
-    t0 = 0
     for i in range(0, len(times)-1):
         if times[i][1] == times[i+1][0]:
             seg_concat = np.concatenate((seg_concat, segs[i+1]))
         else:
-            hold_times.append((t0, times[i][1]))
-            t0 = times[i+1][0]
             concat_seg.append(seg_concat)
             seg_concat = segs[i+1]
     else:
         concat_seg.append(seg_concat)
-        hold_times.append((t0, times[-1][1]))
-    return concat_seg, hold_times
+    return concat_seg
 
-def get_STFTs(segs,htemp):
+def get_STFTs(segs):
     #Get 240ms STFT windows with 50% overlap
     sr = hp.data.sr
     STFT_frames = []
-    STFT_labels = []
-    idx = 0
     for seg in segs:
         S = librosa.core.stft(y=seg, n_fft=hp.data.nfft,
                               win_length=int(hp.data.window * sr), hop_length=int(hp.data.hop * sr))
@@ -198,13 +190,11 @@ def get_STFTs(segs,htemp):
         for j in range(0, S.shape[1], int(.12/hp.data.hop)):
             if j + 24 < S.shape[1]:
                 STFT_frames.append(S[:,j:j+24])
-                STFT_labels.append(htemp[idx])
             else:
                 break
-        idx+=1
-    return STFT_frames, STFT_labels
-    
-def align_embeddings(embeddings, labs):
+    return STFT_frames
+
+def align_embeddings(embeddings):
     partitions = []
     start = 0
     end = 0
@@ -220,38 +210,10 @@ def align_embeddings(embeddings, labs):
     else:
         partitions.append((start,end))
     avg_embeddings = np.zeros((len(partitions),256))
-    emb_labels = []
     for i, partition in enumerate(partitions):
-        emb_lab = labs[partition[0]:partition[1]]
-        if  len(set(emb_lab))>1:
-          continue
-        else:
-          avg_embeddings[i] = np.average(embeddings[partition[0]:partition[1]],axis=0) 
-          emb_labels.append(emb_lab[0])        
-    return avg_embeddings[0:len(emb_labels)], emb_labels
+        avg_embeddings[i] = np.average(embeddings[partition[0]:partition[1]],axis=0) 
+    return avg_embeddings    
 
-#new function
-def align_times(casetimelist, hold_times, spkr_dict):
-  htemp = []
-  _, endtime, endspkr = casetimelist[-1]
-  for h in hold_times:
-    append = False
-    for c in casetimelist:
-      if h[1]<c[1]:
-        if h[1]>=c[0]:
-          spkr_name = c[2]
-          htemp.append(spkr_dict[spkr_name])
-          append = True
-        else:
-          continue
-      else:
-        continue
-    if not append and h[1]!=hold_times[-1][1]:
-      print('value not appended in loop')
-      print(h)
-  htemp.append(spkr_dict[endspkr])
-  return htemp
-  
 if __name__ == "__main__":
     w = grad.Variable(torch.tensor(1.0))
     b = grad.Variable(torch.tensor(0.0))
