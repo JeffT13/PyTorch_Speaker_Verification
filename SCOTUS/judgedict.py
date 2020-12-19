@@ -14,20 +14,14 @@ Edited on Nov 11, 2020
 Create dvector embeddings and labels 
 based on SCOTUS Oyex data (preprocessed)
 
-Outputs 2 json (training & testing) 
-+ 1 csv (bad .wav)
-
 """
 
 
 #Build judge dictionary
 import glob
+import os, sys, json
 import numpy as np
-import os
-import json
-import sys
-sys.path.append("./SpeakerVerificationEmbedding/src")
-from hparam import hparam_SCOTUS as hp
+from SpeechEmbedder.hparam import hparam_SCOTUS as hp
 
 case_path = glob.glob(os.path.dirname(hp.unprocessed_data))
 label = 20 # unknown speaker label counter (leave room for 20 judges)

@@ -14,26 +14,19 @@ Edited on Nov 11, 2020
 Create dvector embeddings and labels 
 based on SCOTUS Oyex data (preprocessed)
 
-Outputs 2 json (training & testing) 
-+ 1 csv (bad .wav)
-
 """
 
-import glob
-import librosa
-import numpy as np
-import os
+import os, sys, json, csv
+import glob, librosa
 import torch
-import json
-import csv
-import sys
-sys.path.append("./SpeakerVerificationEmbedding/src")
-from hparam import hparam_SCOTUS as hp
-from speech_embedder_net import SpeechEmbedder
-from VAD_segments import VAD_chunk
+import numpy as np
+from SpeechEmbedder.hparam import hparam_SCOTUS as hp
+from SpeechEmbedder.speech_embedder_net import SpeechEmbedder
+from SpeechEmbedder.VAD_segments import VAD_chunk
 
 #-----------------------------
 # Following functions adapted/introduced in fork
+# replaces utils import in original repo
 def concat_segs(times, segs):
     #Concatenate continuous voiced segments
     concat_seg = []
