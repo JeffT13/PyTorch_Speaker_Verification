@@ -100,23 +100,6 @@ for file in files:
             end_time = merged_times[t+1].split(' ')[2]
 
     new_ls.append(curr+' '+start_time+' '+end_time)
-    
-    start_time = merged_times[0].split(' ')[1]
-    end_time = merged_times[0].split(' ')[2]
-
-    new_ls = []
-
-    for t in range(len(merged_times)-1):
-        curr = merged_times[t].split(' ')[0]
-        if curr == merged_times[t+1].split(' ')[0]:
-            end_time = merged_times[t+1].split(' ')[2]
-
-        else:
-            new_ls.append(curr+' '+start_time+' '+end_time)
-            start_time = merged_times[t+1].split(' ')[1]
-            end_time = merged_times[t+1].split(' ')[2]
-
-    new_ls.append(curr+' '+start_time+' '+end_time)
 
     os.makedirs(book_path+'Book_'+str(s))
     speak_path = book_path+'Book_'+str(s)
