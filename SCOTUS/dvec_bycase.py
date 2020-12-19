@@ -104,33 +104,29 @@ def align_embeddings(embeddings, labs):
 def align_times(casetimelist, hold_times, spkr_dict):
   htemp = []
   _, endtime, endspkr = casetimelist[-1]
-  for h in hold_times:
+  for i, h in enumerate(hold_times):
     append = False
-    for c in casetimelist:
-      if h[1]<c[1]:
-        if h[1]>=c[0]:
-          spkr_name = c[2]
-          htemp.append(spkr_dict[spkr_name])
-          append = True
-        else:
-          continue
-      else:
-        continue
+    if h[1]>=endtime:
+        htemp.append(spkr_dict[endspkr])
+        append = True
+    else:
+      for j, c in enumerate(casetimelist):
+        if h[1]<c[1]:
+          if h[1]>=c[0]:
+            spkr_name = c[2]
+            htemp.append(spkr_dict[spkr_name])
+            append = True
+          elif h[1]<c[0] and not append:
+            htemp.append(spkr_dict[casetimelist[j-1][2]])
+            append = True
+          elif not append:
+            print("labelling overlapping at ", h)
+            htemp.append(-999) #overlap in diarization and VAD
+            apend=True
     if not append and h[1]!=hold_times[-1][1]:
       print('value not appended in loop')
-      print(h)
-  htemp.append(spkr_dict[endspkr])
+      print(i, h)
   return htemp
-  
-if __name__ == "__main__":
-    w = grad.Variable(torch.tensor(1.0))
-    b = grad.Variable(torch.tensor(0.0))
-    embeddings = torch.tensor([[0,1,0],[0,0,1], [0,1,0], [0,1,0], [1,0,0], [1,0,0]]).to(torch.float).reshape(3,2,3)
-    centroids = get_centroids(embeddings)
-    cossim = get_cossim(embeddings, centroids)
-    sim_matrix = w*cossim + b
-    loss, per_embedding_loss = calc_loss(sim_matrix)
- 
 #-----------------------------
     
 #initialize SpeechEmbedder
