@@ -1,22 +1,21 @@
-import os, json 
-
+import os, json, pickle
 import numpy as np
-import pickle
-
-
-#from hmmlearn import hmm
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
-
+from sklearn.manifold import TSNE
 np.random.seed(13)
 
-case_path = '/mnt/c/Fall2020/Capstone/LegalUISRNN/data/ICSI_sve/'
-#case_path = '/mnt/c/Fall2020/Capstone/LegalUISRNN/data/resembl_dvec/'
 
+
+fp = '../../data/SCOTUS/'
+case_path = fp+'dvectors/sco50d/'
+    
 total_cases = (len(os.listdir(case_path))/2)
 train_cases = (total_cases//10)*9
-print("# of training:", train_cases)
 print("# total cases:" , total_cases)
-
+print("# of training:", train_cases)
 
 trn_seq_lst = []
 trn_cluster_lst = []
@@ -29,16 +28,14 @@ if verbose:
     print("\n", "="*50, "\n Processing SVE d-vec")
         
 #load 5 case-embedded dvecs (with directory holding raw files)
-for i, case in enumerate(os.listdir(case_path)):
+i = 0
+for case in os.listdir(case_path):
     if case[-7:] == 'seq.npy':
-        #if SVE
         case_id = case.split('/')[-1].split('_')[0]
-        
-        #if Res -> case_id = case.split('/')[-1].split('.')[0][:-4]
-        
+
         train_sequence = np.load(case_path+case)
         train_clus = np.load(case_path+case_id+'_id.npy')
-               
+
         if verbose:
             if i > train_cases:
                 print("-- Stored as test case --")
@@ -47,14 +44,15 @@ for i, case in enumerate(os.listdir(case_path)):
             print('Processed case:', case_id)
             print('emb shape:', np.shape(train_sequence))
             print('label shape:', np.shape(train_clus))    
-                
+
         #add to training or testing list (for multiple cases       
-        if i <= train_cases:
+        if i < train_cases:
             trn_seq_lst.append(train_sequence)
             trn_cluster_lst.append(train_clus)
         else:
             test_seq_lst.append(train_sequence)
-            test_cluster_lst.append(train_clus) 
+            test_cluster_lst.append(train_clus)
+        i+=1
             
  
 
@@ -88,10 +86,7 @@ for i, case in enumerate(test_cluster_lst):
 
 
 
-print('-- Training --')
 limit = 30
-HMM=False
-save=False
 X = np.concatenate([case for case in judge_seq[:limit]])
 Y = np.concatenate([id for id in judge_id[:limit]])
 num = len(np.unique(Y))
@@ -101,18 +96,12 @@ print('Number of speakers in training set:', num)
 test = test_seq[0]
 test_lab = test_id[0]
 
-if HMM:
-    print('-- HMM --')
-    lengths = [len(case) for case in trn_seq_lst[:limit]]
-    model = hmm.GaussianHMM(n_components=num, covariance_type='full', n_iter=20)
-    model.fit(X, lengths)
+
+print('-- K-Means --')
+print('-- Training --')
+model = KMeans(n_clusters=num, random_state=0)
+model.fit(X)
    
-else: #K-means
-    print('-- K-Means --')
-    model = KMeans(n_clusters=num, random_state=0)
-    model.fit(X)
-   
-    
 print('-- Inference --')
 infer = model.predict(test)   
 
@@ -127,9 +116,4 @@ if verbose:
 print('--- Centroid Array ---')
 print(np.shape(model.cluster_centers_))
 
-
-if save==True:   
-    with open("scotus_model.pkl", "wb") as file: 
-        pickle.dump(model, file)
-    
 print('-- complete ---')
