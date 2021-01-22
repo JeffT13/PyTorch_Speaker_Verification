@@ -11,7 +11,7 @@ import torch
 import torch.autograd as grad
 import torch.nn.functional as F
 
-from hparam import hparam as hp
+from .hparam import hparam as hp
 
 def get_centroids_prior(embeddings):
     centroids = []

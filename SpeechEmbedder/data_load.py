@@ -13,8 +13,8 @@ from random import shuffle
 import torch
 from torch.utils.data import Dataset
 
-from hparam import hparam as hp
-from utils import mfccs_and_spec
+from .hparam import hparam as hp
+from .utils import mfccs_and_spec
 
 class SpeakerDatasetTIMIT(Dataset):
     

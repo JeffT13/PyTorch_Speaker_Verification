@@ -16,7 +16,7 @@ import wave
 
 import webrtcvad
 
-from hparam import hparam as hp
+from .hparam import hparam as hp
 
 def read_wave(path, sr):
     """Reads a .wav file.

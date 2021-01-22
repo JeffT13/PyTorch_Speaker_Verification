@@ -1,9 +1,10 @@
 device: "cuda"
-unprocessed_data: '/scratch/smt570/SCOTUS_full/wavs/SCOTUS/*/*' #case subsection
+unprocessed_data: './data/SCOTUS/cases/sco50/*/*'
 ---
 data:
-    main_path: '/scratch/smt570/SCOTUS_full/wavs/SCOTUS/'
-    save_path: '/scratch/jt2565/SCOTUSfull_Processed/'
+    main_path: './data/SCOTUS/cases/sco50/'
+    save_path: './data/SCOTUS/dvectors/sco50d'
+    dict_path: './data/SCOTUS/info/'
     verbose: !!bool "true"
     sr: 16000
     nfft: 512 #For mel spectrogram preprocess
@@ -17,4 +18,4 @@ model:
     num_layer: 3 #Number of LSTM layers
     proj: 256 #Embedding size
     #model_path: '/SpeakerVerification/data/model.model/'
-    model_path: '/scratch/igw212/capstone/CDS-Capstone-2020/colab_diarization/model.model'  #Model path for testing, inference, or resuming training
+    model_path: './data/speechembedder.model'  #Model path for testing, inference, or resuming training

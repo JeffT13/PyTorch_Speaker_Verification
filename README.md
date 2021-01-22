@@ -1,7 +1,6 @@
 # SpeakerVerificationEmbedding
 
-
-Implementation of speech embedding net and loss (described [here](https://arxiv.org/pdf/1710.10467.pdf)). Original implementation by HarryVolek utilizes the [TIMIT dataset](https://github.com/philipperemy/timit) for training the speech embedder and an outline to build dvector-embeddings around. We add the [ICSI database](http://groups.inf.ed.ac.uk/ami/icsi/license.shtml) to the speech embedding net training and convert the Supreme Court of the United States (SCOTUS) oral arguments and [LibriSpeech](http://www.openslr.org/12/) readings into d-vector embeddings for the [UIS-RNN](https://github.com/google/uis-rnn) speaker diarization model. 
+Implementation of an LSTM speech encoding network and [Generalized End-to-End Loss](https://arxiv.org/pdf/1710.10467.pdf). Original implementation by HarryVolek trains the `SpeechEmbedder` on the [TIMIT dataset](https://github.com/philipperemy/timit) and outlines inferring [d-vectors](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41939.pdf) with it. We add the [ICSI](http://groups.inf.ed.ac.uk/ami/icsi/license.shtml) and [LibriSpeech](http://www.openslr.org/12/) datasets to the training and embed the Supreme Court of the United States (SCOTUS) [oral arguments & transcriptions](https://www.oyez.org/) into d-vectors with labels for various speaker diarization methods.
 
 Adapted by Jeffrey Tumminia, Sophia Tsilerides, Amanda Kuznecov, Ilana Weinstein as part of NYU Center for Data Science Capstone Project. Research mentored by Prof. Aaron Kaufman. Computational resources provided by NYU Prince HPC.  
 
@@ -17,28 +16,14 @@ Adapted by Jeffrey Tumminia, Sophia Tsilerides, Amanda Kuznecov, Ilana Weinstein
 
 # Outline
 
-## Datasets
-
-We utilize the following datasets
+We train the `SpeechEmbedder` on following datasets
 
     - [TIMIT](https://github.com/philipperemy/timit)
     - [ICSI](http://groups.inf.ed.ac.uk/ami/icsi/license.shtml)
-    - [SCOTUS Oyez](https://www.oyez.org/)
     - [LibriSpeech](http://www.openslr.org/12/)
+
+Each dataset (aside from the TIMIT) contains a folder with its own readme outlining the procedures taken with it. The TIMIT dataset follows the structure of the [base repo](https://github.com/HarryVolek/PyTorch_Speaker_Verification). The README of the SpeechEmbedder folder is a slight variation of the README from the base repo including our test performance. 
     
-TIMIT and ISCI are used to train `SpeechEmbedder` model. SCOTUS and Libre are datasets represented as dvectors and aligned with their diarization times to make labelled datasets for the UISRNN. Details for data preprocessing & handling are in dataset level readmes found in the folders.
+We then evaluate the performance of the embedding network for d-vector generation with the [SCOTUS Oyez](https://www.oyez.org/) dataset which has been [https://github.com/walkerdb/supreme_court_transcripts](diarized and transcribed). The SCOTUS folder contains a README outlining the contents of the folder and the audio processing + d-vector generation procedure.
+
     
-## Performance 
-
-Model trained on TIMIT and fine-tuned on ICSI. Test set is held-out TIMIT data with unknown speakers.
-
-```
-EER across # epochs: .0578
-```
-
-## D-vector Embedding
-
-Inference scripts are present for the SCOTUS and Libre dataset. The preprocessing for these datasets is outlined ...
-
-
-Calling `dvector_SCOTUS` outputs a folder for each case processed, each containing a numpy array of dvector embeddings which are unaligned with the sequence of the case audio. Calling `align_SCOTUS.py` will process these unaligned cases into a numpy array of dvectors (`case_sequence.npy`) and a numpy array of labels (`case_cluster_id.npy`) which are both the same length, as well as a csv of a list of files which were not embedded (usually do to being too short). These are formatted for [our fork of the uisrnn](https://github.com/JeffT13/LegalUISRNN)
