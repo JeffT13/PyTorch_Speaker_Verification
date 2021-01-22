@@ -16,33 +16,14 @@ Adapted by Jeffrey Tumminia, Sophia Tsilerides, Amanda Kuznecov, Ilana Weinstein
 
 # Outline
 
-## Datasets
-
-We trian the `SpeechEmbedder` on following datasets
+We train the `SpeechEmbedder` on following datasets
 
     - [TIMIT](https://github.com/philipperemy/timit)
     - [ICSI](http://groups.inf.ed.ac.uk/ami/icsi/license.shtml)
     - [LibriSpeech](http://www.openslr.org/12/)
-    - [SCOTUS Oyez](https://www.oyez.org/)
 
-Each dataset (aside from the TIMIT) contains a folder with its own readme outlining the procedures taken with it. The TIMIT dataset follows the structure of the [base repo](https://github.com/HarryVolek/PyTorch_Speaker_Verification).
+Each dataset (aside from the TIMIT) contains a folder with its own readme outlining the procedures taken with it. The TIMIT dataset follows the structure of the [base repo](https://github.com/HarryVolek/PyTorch_Speaker_Verification). The README of the SpeechEmbedder folder is a slight variation of the README from the base repo including our test performance. 
     
+We then evaluate the performance of the embedding network for d-vector generation with the [SCOTUS Oyez](https://www.oyez.org/) dataset which has been [https://github.com/walkerdb/supreme_court_transcripts](diarized and transcribed). The SCOTUS folder contains a README outlining the contents of the folder and the audio processing + d-vector generation procedure.
 
     
-## SpeechEmbedder Performance 
-
-We evaluate our model on the original TIMIT test set after each additional dataset. Our results are below.
-
-```
-LaTeX Chart
-```
-
-
-## d-vector Performance 
-
-We utilize the Oyez SCOTUS dataset to 
-
-Inference scripts are present for the SCOTUS and Libre dataset. The preprocessing for these datasets is outlined
-
-
-Calling `dvector_SCOTUS` outputs a folder for each case processed, each containing a numpy array of dvector embeddings which are unaligned with the sequence of the case audio. Calling `align_SCOTUS.py` will process these unaligned cases into a numpy array of dvectors (`case_sequence.npy`) and a numpy array of labels (`case_cluster_id.npy`) which are both the same length, as well as a csv of a list of files which were not embedded (usually do to being too short). These are formatted for [our fork of the uisrnn](https://github.com/JeffT13/LegalUISRNN)

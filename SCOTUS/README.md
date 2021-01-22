@@ -5,8 +5,9 @@
 Prepping SCOTUS data for modeling. 
 
 Credit: 
-- https://www.oyez.org/ for their API archive of Supreme Court multimedia
-- https://github.com/walkerdb/supreme_court_transcripts for oyez parsing functions in mp3-to-gcp/oyez_parser.ipynb
+- [https://www.oyez.org/](OyezDB ) for their API archive of Supreme Court multimedia
+- [https://github.com/walkerdb/supreme_court_transcripts](Oyez Transcriptions)  for oyez parsing functions in mp3-to-gcp/oyez_parser.ipynb
+- [PyTorch_Speaker_Verification](https://github.com/HarryVolek/PyTorch_Speaker_Verification) for baseline d-vector implementation
 
 ### Prerequisites 
 You will need the case_summaries.json from https://github.com/walkerdb/supreme_court_transcripts/tree/master/oyez.
@@ -57,4 +58,14 @@ module load rclone/1.38
 
 ## d-vector embedding
 
+
+
 This procedure outputs a folder for each case processed, each containing a numpy array of dvector embeddings (`case_sequence.npy`) and a numpy array of labels (`case_cluster_id.npy`) which are both the same length, as well as a csv of a list of files which were not embedded (usually do to being too short). These are formatted for [our fork of the uisrnn](https://github.com/JeffT13/uis-rnn) 
+
+
+
+We utilize the Oyez SCOTUS dataset to 
+
+Inference scripts are present for the SCOTUS and Libre dataset. The preprocessing for these datasets is outlined
+
+
